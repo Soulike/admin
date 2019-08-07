@@ -6,18 +6,18 @@ import Store from './Store';
 import * as serviceWorker from './serviceWorker';
 import Loading from './Component/Loading';
 import './ModuleConfig';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
+import zhCN from 'antd/es/locale/zh_CN';
 
-const LocaleProvider = React.lazy(() => import('antd/lib/locale-provider'));
+const ConfigProvider = React.lazy(() => import('antd/lib/config-provider'));
 const Router = React.lazy(() => import('./Router'));
 
 ReactDOM.render(
     <Suspense fallback={<Loading />}>
-        <LocaleProvider locale={zhCN}>
+        <ConfigProvider locale={zhCN}>
             <Provider store={Store}>
                 <Router />
             </Provider>
-        </LocaleProvider>
+        </ConfigProvider>
     </Suspense>,
     document.getElementById('root'));
 
