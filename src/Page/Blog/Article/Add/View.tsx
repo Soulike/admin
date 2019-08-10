@@ -4,7 +4,7 @@ import {Button, Checkbox, Input, Select} from 'antd';
 import {SelectProps} from 'antd/lib/select';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {Category} from '../../../Class';
+import {Category} from '../../../../Class';
 import {CheckboxProps} from 'antd/lib/checkbox';
 
 const {Group, TextArea} = Input;

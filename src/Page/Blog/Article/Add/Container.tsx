@@ -1,10 +1,10 @@
 import React, {PureComponent} from 'react';
 import View from './View';
-import {Article, Category} from '../../../Class';
+import {Article, Category} from '../../../../Class';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {addArticle, getAllCategory} from '../../../Api';
+import {addArticle, getAllCategory} from '../../../../Api';
 import {message, notification} from 'antd';
 import {CheckboxProps} from 'antd/lib/checkbox';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
