@@ -3,7 +3,7 @@ import LoginView from './View';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {login} from '../../Api';
-import {message} from 'antd';
+import {notification} from 'antd';
 import {InputProps} from 'antd/lib/input';
 import {FormProps} from 'antd/lib/form';
 
@@ -43,7 +43,7 @@ class Login extends PureComponent<Props, State>
         const isSuccessful = await login(username, password);
         if (isSuccessful)
         {
-            message.success('登录成功');
+            notification.success({message: '登录成功'});
             this.props.history.push(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
         }
     };

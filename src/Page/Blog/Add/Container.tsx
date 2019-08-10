@@ -5,7 +5,7 @@ import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {addArticle, getAllCategory} from '../../../Api';
-import {message} from 'antd';
+import {message, notification} from 'antd';
 import {CheckboxProps} from 'antd/lib/checkbox';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 
@@ -117,7 +117,7 @@ class Add extends PureComponent<Props, State>
             await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {
-                message.success('文章提交成功');
+                notification.success({message: '文章提交成功'});
                 await this.setStatePromise(
                     {
                         title: '',
