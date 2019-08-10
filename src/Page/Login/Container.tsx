@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FormEvent, PureComponent} from 'react';
 import LoginView from './View';
-import {PAGE_ID, PAGE_ID_TO_NAME, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG/PAGE';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {login} from '../../Api';
 import {message} from 'antd';
@@ -22,11 +22,6 @@ class Login extends PureComponent<Props, State>
             username: '',
             password: '',
         };
-    }
-
-    componentDidMount()
-    {
-        document.title = PAGE_ID_TO_NAME[ROUTE_TO_PAGE_ID[this.props.location.pathname]];
     }
 
     onUsernameInputChange = (e: ChangeEvent<HTMLInputElement>) =>

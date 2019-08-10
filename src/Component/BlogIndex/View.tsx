@@ -1,14 +1,14 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import svg from '../../Static/Manage/network_2.svg';
+import svg from '../../Static/Blog/macbook.svg';
 
-function ManageView()
+function BlogIndexView()
 {
     return (
-        <div className={Style.Manage}>
+        <div className={Style.BlogIndex}>
             <img className={Style.image} src={svg} alt="manage_index" />
         </div>
     );
 }
 
-export default React.memo(ManageView);
+export default React.memo(BlogIndexView);

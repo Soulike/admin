@@ -12,7 +12,7 @@ export default () =>
             {
                 Object.values(ARTICLE).map(pageId =>
                 {
-                    return <Route key={pageId}
+                    return <Route exact={true} key={pageId}
                                   path={PAGE_ID_TO_ROUTE[pageId]}
                                   component={PAGE_ID_TO_COMPONENT[pageId]} />;
                 })
