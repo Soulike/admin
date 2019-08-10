@@ -1,9 +1,11 @@
-import React, {ChangeEvent, FormEvent, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import LoginView from './View';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {login} from '../../Api';
 import {message} from 'antd';
+import {InputProps} from 'antd/lib/input';
+import {FormProps} from 'antd/lib/form';
 
 interface Props extends RouteComponentProps {}
 
@@ -24,17 +26,17 @@ class Login extends PureComponent<Props, State>
         };
     }
 
-    onUsernameInputChange = (e: ChangeEvent<HTMLInputElement>) =>
+    onUsernameInputChange: InputProps['onChange'] = e =>
     {
         this.setState({username: e.target.value});
     };
 
-    onPasswordInputChange = (e: ChangeEvent<HTMLInputElement>) =>
+    onPasswordInputChange: InputProps['onChange'] = e =>
     {
         this.setState({password: e.target.value});
     };
 
-    onLoginFormSubmit = async (e: FormEvent<HTMLFormElement>) =>
+    onLoginFormSubmit: FormProps['onSubmit'] = async e =>
     {
         e.preventDefault();
         const {username, password} = this.state;

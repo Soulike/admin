@@ -1,15 +1,17 @@
-import React, {ChangeEventHandler, FormEventHandler} from 'react';
+import React from 'react';
 import Style from './Style.module.scss';
 import {Button, Icon, Input} from 'antd';
 import web_developer from '../../Static/Login/web_developer.svg';
+import {InputProps} from 'antd/lib/input';
+import {FormProps} from 'antd/lib/form';
 
 interface Props
 {
     username: string,
     password: string,
-    onUsernameInputChange: ChangeEventHandler<HTMLInputElement>,
-    onPasswordInputChange: ChangeEventHandler<HTMLInputElement>,
-    onLoginFormSubmit: FormEventHandler<HTMLFormElement>
+    onUsernameInputChange: InputProps['onChange'],
+    onPasswordInputChange: InputProps['onChange'],
+    onLoginFormSubmit: FormProps['onSubmit'],
 }
 
 function LoginView(props: Props)
