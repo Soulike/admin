@@ -1,19 +1,21 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Card, Icon, Layout, Menu} from 'antd';
+import {Button, Card, Icon, Layout, Menu} from 'antd';
 import {Link} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {NativeButtonProps} from 'antd/lib/button/button';
 
 const {Header, Content, Footer} = Layout;
 
 interface Props
 {
-    children?: React.ReactNode
+    children?: React.ReactNode,
+    onExitButtonClick: NativeButtonProps['onClick'],
 }
 
 function FrameView(props: Props)
 {
-    const {children} = props;
+    const {children, onExitButtonClick} = props;
     return (
         <Layout className={Style.Frame}>
             <Header className={Style.header}>
@@ -30,8 +32,12 @@ function FrameView(props: Props)
                         <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}>博客</Link>
                     </Menu.Item>
                 </Menu>
+                <Button type={'link'}
+                        className={Style.exitButton}
+                        size={'large'}
+                        onClick={onExitButtonClick}>退出登录</Button>
             </Header>
-            <Layout>
+            <Layout className={Style.contentLayout}>
                 <Content className={Style.content}>
                     <Card className={Style.card} bodyStyle={{height: '100%'}}>
                         {children}

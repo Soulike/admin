@@ -1,13 +1,13 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {Icon, Layout, Menu} from 'antd';
-import {Link, RouteProps, withRouter} from 'react-router-dom';
+import {Link, RouteComponentProps, withRouter} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG/PAGE';
 
 const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
 
-interface Props extends RouteProps
+interface Props extends RouteComponentProps
 {
     children?: React.ReactNode
 }
@@ -19,7 +19,7 @@ function BlogFrameView(props: Props)
         <Layout className={Style.BlogFrame}>
             <Sider width={250} theme={'light'}>
                 <Menu theme={'light'}
-                      mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location!.pathname]]}>
+                      mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location.pathname]]}>
                     <SubMenu title={
                         <span>
                             <Icon type="file-text" theme="filled" />
