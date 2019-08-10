@@ -1,38 +1,38 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {Icon, Layout, Menu} from 'antd';
-import {Link} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {Link, RouteProps, withRouter} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG/PAGE';
 
 const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
 
-interface Props
+interface Props extends RouteProps
 {
     children?: React.ReactNode
 }
 
 function BlogFrameView(props: Props)
 {
-    const {children} = props;
+    const {children, location} = props;
     return (
         <Layout className={Style.BlogFrame}>
             <Sider width={250} theme={'light'}>
                 <Menu theme={'light'}
-                      mode={'inline'}>
+                      mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location!.pathname]]}>
                     <SubMenu title={
                         <span>
                             <Icon type="file-text" theme="filled" />
                             文章
                         </span>
                     }>
-                        <Menu.Item>
+                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.ADD}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}>
                                 <Icon type="plus-circle" />
                                 添加
                             </Link>
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}>
                                 <Icon type="info-circle" />
                                 管理
@@ -45,14 +45,13 @@ function BlogFrameView(props: Props)
                             文章分类
                         </span>
                     }>
-                        <Menu.Item>
-
+                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.ADD}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}>
                                 <Icon type="plus-circle" />
                                 添加
                             </Link>
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}>
                                 <Icon type="info-circle" />
                                 管理
@@ -68,4 +67,4 @@ function BlogFrameView(props: Props)
     );
 }
 
-export default React.memo(BlogFrameView);
+export default React.memo(withRouter(BlogFrameView));

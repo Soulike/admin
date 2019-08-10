@@ -114,9 +114,9 @@ class Add extends PureComponent<Props, State>
                     undefined,
                     undefined,
                     isVisible));
+            await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {
-                await this.setStatePromise({isSubmittingArticle: false});
                 message.success('文章提交成功');
                 await this.setStatePromise(
                     {

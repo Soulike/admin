@@ -10,6 +10,7 @@ export async function getArticleById(id: number): Promise<Article | null>
         const {data: response}: AxiosResponse<Response<Article>> = await axios.get(GET_BY_ID, {
             params: {
                 json: JSON.stringify({id}),
+                _t: Date.now(),
             },
         });
 
@@ -36,7 +37,9 @@ export async function getAllArticle(): Promise<Array<Article> | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<Array<Article>>> = await axios.get(GET_ALL);
+        const {data: response}: AxiosResponse<Response<Array<Article>>> = await axios.get(GET_ALL, {
+            params: {_t: Date.now()},
+        });
 
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)
@@ -64,6 +67,7 @@ export async function getArticleByCategory(category: number): Promise<Array<Arti
         const {data: response}: AxiosResponse<Response<Array<Article>>> = await axios.get(GET_BY_CATEGORY, {
             params: {
                 json: JSON.stringify({category}),
+                _t: Date.now(),
             },
         });
         const {isSuccessful, message: msg, data} = response;
@@ -91,7 +95,7 @@ export async function addArticle(article: Article): Promise<true | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<void>> = await axios.post(ADD, JSON.stringify(article));
+        const {data: response}: AxiosResponse<Response<void>> = await axios.post(ADD, article);
         const {isSuccessful, message: msg} = response;
         if (isSuccessful)
         {
@@ -115,7 +119,7 @@ export async function deleteArticleById(id: number): Promise<true | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<void>> = await axios.post(DELETE_BY_ID, JSON.stringify({id}));
+        const {data: response}: AxiosResponse<Response<void>> = await axios.post(DELETE_BY_ID, {id});
         const {isSuccessful, message: msg} = response;
         if (isSuccessful)
         {
@@ -139,7 +143,7 @@ export async function modifyArticle(article: Article): Promise<true | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<void>> = await axios.post(MODIFY, JSON.stringify(article));
+        const {data: response}: AxiosResponse<Response<void>> = await axios.post(MODIFY, article);
         const {isSuccessful, message: msg} = response;
         if (isSuccessful)
         {

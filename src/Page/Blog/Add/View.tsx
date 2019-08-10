@@ -66,7 +66,7 @@ function Add(props: Props)
                         categoryOption.map(category =>
                         {
                             const {id, name} = category;
-                            return <Option value={id}>{name}</Option>;
+                            return <Option value={id} key={id}>{name}</Option>;
                         })
                     }
                 </Select>

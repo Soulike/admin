@@ -25,7 +25,7 @@ function FrameView(props: Props)
                 </Link>
                 <Menu theme="dark"
                       mode="horizontal"
-                      className={Style.menu}>
+                      className={Style.menu} selectable={false}>
                     <Menu.Item>
                         <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}>博客</Link>
                     </Menu.Item>

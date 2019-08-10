@@ -2,6 +2,7 @@
   "name": "admin",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://39.96.200.130:8001",
   "dependencies": {
     "@types/jest": "^24.0.17",
     "@types/node": "^12.7.1",

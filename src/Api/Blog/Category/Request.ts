@@ -7,7 +7,12 @@ export async function getAllCategory(): Promise<Array<Category> | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<Array<Category>>> = await axios.get(GET_ALL);
+        const {data: response}: AxiosResponse<Response<Array<Category>>> = await axios.get(GET_ALL,
+            {
+                params: {
+                    _t: Date.now(),
+                },
+            });
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)
         {
@@ -32,7 +37,7 @@ export async function getAllArticleAmountByCategoryId(): Promise<Array<{ [catego
     try
     {
         const {data: response}: AxiosResponse<Response<Array<{ [categoryId: number]: number }>>> =
-            await axios.get(GET_ALL_ARTICLE_AMOUNT_BY_ID);
+            await axios.get(GET_ALL_ARTICLE_AMOUNT_BY_ID, {params: {_t: Date.now()}});
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)
         {
@@ -59,6 +64,7 @@ export async function getArticleAmountByCategoryId(id: number): Promise<number |
         const {data: response}: AxiosResponse<Response<number>> = await axios.get(GET_ARTICLE_AMOUNT_BY_ID, {
             params: {
                 json: JSON.stringify({id}),
+                _t: Date.now(),
             },
         });
 
@@ -86,7 +92,7 @@ export async function addCategory(category: Category): Promise<true | null>
     try
     {
         const {data: {isSuccessful, message: msg}}: AxiosResponse<Response<void>> =
-            await axios.post(ADD, JSON.stringify(category));
+            await axios.post(ADD, category);
         if (isSuccessful)
         {
             return true;
@@ -110,7 +116,7 @@ export async function deleteCategoryById(id: number): Promise<true | null>
     try
     {
         const {data: {isSuccessful, message: msg}}: AxiosResponse<Response<void>> =
-            await axios.post(DELETE_BY_ID, JSON.stringify({id}));
+            await axios.post(DELETE_BY_ID, {id});
         if (isSuccessful)
         {
             return true;
@@ -134,7 +140,7 @@ export async function modifyCategory(category: Category): Promise<true | null>
     try
     {
         const {data: {isSuccessful, message: msg}}: AxiosResponse<Response<void>> =
-            await axios.post(MODIFY, JSON.stringify(category));
+            await axios.post(MODIFY, category);
         if (isSuccessful)
         {
             return true;
