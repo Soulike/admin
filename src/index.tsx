@@ -7,17 +7,17 @@ import * as serviceWorker from './serviceWorker';
 import Loading from './Component/Loading';
 import './ModuleConfig';
 import zhCN from 'antd/es/locale/zh_CN';
+import {ConfigProvider} from 'antd';
 
-const ConfigProvider = React.lazy(() => import('antd/lib/config-provider'));
 const Router = React.lazy(() => import('./Router'));
 
 ReactDOM.render(
     <Suspense fallback={<Loading />}>
-        <ConfigProvider locale={zhCN}>
-            <Provider store={Store}>
+        <Provider store={Store}>
+            <ConfigProvider locale={zhCN}>
                 <Router />
-            </Provider>
-        </ConfigProvider>
+            </ConfigProvider>
+        </Provider>
     </Suspense>,
     document.getElementById('root'));
 

@@ -8,6 +8,7 @@ import {addArticle, getAllCategory} from '../../../../Api';
 import {message, notification} from 'antd';
 import {CheckboxProps} from 'antd/lib/checkbox';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {markdownConverter} from '../../../../Singleton';
 
 interface Props extends RouteComponentProps {}
 
@@ -20,6 +21,8 @@ interface State
     categoryOption: Array<Category>,
     isLoadingCategory: boolean,
     isSubmittingArticle: boolean,
+    isArticlePreviewModalVisible: boolean,
+    HTMLContent: string,
 }
 
 class Add extends PureComponent<Props, State>
@@ -35,6 +38,8 @@ class Add extends PureComponent<Props, State>
             categoryOption: [],
             isLoadingCategory: false,
             isSubmittingArticle: false,
+            isArticlePreviewModalVisible: false,
+            HTMLContent: '',
         };
     }
 
@@ -53,6 +58,16 @@ class Add extends PureComponent<Props, State>
     {
         this.getCategoryOption();
     }
+
+    onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
+    {
+        e.preventDefault();
+        const {isArticlePreviewModalVisible, content} = this.state;
+        this.setState({
+            isArticlePreviewModalVisible: !isArticlePreviewModalVisible,
+            HTMLContent: markdownConverter.makeHtml(content),
+        });
+    };
 
     getCategoryOption = async () =>
     {
@@ -134,7 +149,7 @@ class Add extends PureComponent<Props, State>
 
     render()
     {
-        const {title, content, category, isVisible, categoryOption, isLoadingCategory, isSubmittingArticle} = this.state;
+        const {title, content, category, isVisible, categoryOption, isLoadingCategory, isSubmittingArticle, isArticlePreviewModalVisible, HTMLContent} = this.state;
         return (<View title={title}
                       content={content}
                       category={category}
@@ -146,7 +161,10 @@ class Add extends PureComponent<Props, State>
                       onIsVisibleCheckboxChange={this.onIsVisibleCheckboxChange}
                       onSubmitButtonClick={this.onSubmitButtonClick}
                       isLoadingCategory={isLoadingCategory}
-                      isSubmittingArticle={isSubmittingArticle} />);
+                      isSubmittingArticle={isSubmittingArticle}
+                      isArticlePreviewModalVisible={isArticlePreviewModalVisible}
+                      onArticlePreviewButtonClick={this.onArticlePreviewButtonClick}
+                      HTMLContent={HTMLContent} />);
     }
 }
 

@@ -6,6 +6,7 @@ import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {Category} from '../../../../Class';
 import {CheckboxProps} from 'antd/lib/checkbox';
+import ArticlePreviewModal from '../../../../Component/ArticlePreviewModal';
 
 const {Group, TextArea} = Input;
 const {Option} = Select;
@@ -24,6 +25,9 @@ interface Props
     onSubmitButtonClick: NativeButtonProps['onClick'],
     isLoadingCategory: boolean,
     isSubmittingArticle: boolean,
+    onArticlePreviewButtonClick: NativeButtonProps['onClick'],
+    isArticlePreviewModalVisible: boolean,
+    HTMLContent: string,
 }
 
 function Add(props: Props)
@@ -41,6 +45,9 @@ function Add(props: Props)
         onSubmitButtonClick,
         isLoadingCategory,
         isSubmittingArticle,
+        onArticlePreviewButtonClick,
+        isArticlePreviewModalVisible,
+        HTMLContent,
     } = props;
     return (
         <div className={Style.Add}>
@@ -73,11 +80,19 @@ function Add(props: Props)
                 <Checkbox disabled={isSubmittingArticle || isLoadingCategory}
                           checked={isVisible}
                           onChange={onIsVisibleCheckboxChange}>公开文章</Checkbox>
-                <Button loading={isSubmittingArticle}
-                        type={'primary'}
-                        size={'large'} disabled={isSubmittingArticle || isLoadingCategory}
-                        onClick={onSubmitButtonClick}>提交</Button>
+                <div className={Style.buttonWrapper}>
+                    <Button size={'large'} onClick={onArticlePreviewButtonClick}>预览</Button>
+                    <Button loading={isSubmittingArticle}
+                            type={'primary'}
+                            size={'large'} disabled={isSubmittingArticle || isLoadingCategory}
+                            onClick={onSubmitButtonClick}>提交</Button>
+                </div>
             </div>
+            <ArticlePreviewModal title={title}
+                                 HTMLContent={HTMLContent}
+                                 visible={isArticlePreviewModalVisible}
+                                 onOk={onArticlePreviewButtonClick}
+                                 onCancel={onArticlePreviewButtonClick} />
         </div>
     );
 }

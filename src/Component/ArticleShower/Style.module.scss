@@ -1,0 +1,18 @@
+.ArticleShower {
+    pre {
+        border-radius: 4px;
+        background-clip: border-box;
+    }
+
+    blockquote {
+        border-left: 10px solid #6CF;
+        border-top: 1px solid #DDD;
+        border-bottom: 1px solid #DDD;
+        padding: 2em;
+
+        p {
+            margin: 0;
+            line-height: 2em;
+        }
+    }
+}
