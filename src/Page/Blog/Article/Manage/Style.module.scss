@@ -1,0 +1,17 @@
+.Manage {
+    padding: 0 50px;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+
+    .switch {
+        margin-left: 20px;
+    }
+
+    .buttonWrapper {
+        margin-left: 20px;
+    }
+}
