@@ -32,11 +32,11 @@ export async function getAllCategory(): Promise<Array<Category> | null>
     }
 }
 
-export async function getAllArticleAmountByCategoryId(): Promise<Array<{ [categoryId: number]: number }> | null>
+export async function getAllArticleAmountByCategoryId(): Promise<{ [categoryId: number]: number } | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<Array<{ [categoryId: number]: number }>>> =
+        const {data: response}: AxiosResponse<Response<{ [categoryId: number]: number }>> =
             await axios.get(GET_ALL_ARTICLE_AMOUNT_BY_ID, {params: {_t: Date.now()}});
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)

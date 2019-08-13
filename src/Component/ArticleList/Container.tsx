@@ -1,15 +1,15 @@
 import React, {DOMAttributes, PureComponent} from 'react';
 import View from './View';
-import {Article, Category} from '../../../../Class';
+import {Article, Category} from '../../Class';
 import {ModalProps} from 'antd/lib/modal';
-import {markdownConverter} from '../../../../Singleton';
+import {markdownConverter} from '../../Singleton';
 import {message, notification} from 'antd';
-import {deleteArticleById, getAllArticle, modifyArticle} from '../../../../Api/Blog/Article';
-import {getAllCategory} from '../../../../Api/Blog/Category';
+import {deleteArticleById, getAllArticle, getArticleByCategory, modifyArticle} from '../../Api/Blog/Article';
+import {getAllCategory} from '../../Api/Blog/Category';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import querystring from 'querystring';
 import {SwitchProps} from 'antd/lib/switch';
 
@@ -27,9 +27,12 @@ interface State
     idOfArticleToDelete: number,
 }
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps
+{
+    categoryIdFilter?: number, // 限定文章的分类
+}
 
-class Manage extends PureComponent<Props, State>
+class ArticleList extends PureComponent<Props, State>
 {
     constructor(props: Props)
     {
@@ -61,13 +64,24 @@ class Manage extends PureComponent<Props, State>
 
     componentDidMount()
     {
+        const {categoryIdFilter} = this.props;
         this.setStatePromise({isLoading: true})
             .then(() =>
             {
-                return Promise.all([
-                    getAllArticle(),
-                    getAllCategory(),
-                ]);
+                if (typeof categoryIdFilter === 'undefined')
+                {
+                    return Promise.all([
+                        getAllArticle(),
+                        getAllCategory(),
+                    ]);
+                }
+                else
+                {
+                    return Promise.all([
+                        getArticleByCategory(categoryIdFilter),
+                        getAllCategory(),
+                    ]);
+                }
             })
             .then(([articleList, categoryList]) =>
             {
@@ -200,4 +214,4 @@ class Manage extends PureComponent<Props, State>
     }
 }
 
-export default withRouter(Manage);
+export default withRouter(ArticleList);
