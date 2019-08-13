@@ -1,0 +1,34 @@
+.ArticleEditor {
+    .inputGroup {
+        .title {
+            font-weight: bolder;
+            font-family: serif;
+            text-align: center;
+        }
+
+        .content {
+            margin-top: 25px;
+            resize: none;
+            height: 60vh;
+            line-height: 1.5em;
+        }
+    }
+
+    .bottomWrapper {
+        margin-top: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .buttonWrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 150px;
+        }
+
+        .categorySelect {
+            width: 10vw;
+        }
+    }
+}

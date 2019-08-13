@@ -8,6 +8,9 @@ import {deleteArticleById, getAllArticle} from '../../../../Api/Blog/Article';
 import {getAllCategory} from '../../../../Api/Blog/Category';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
+import querystring from 'querystring';
 
 interface State
 {
@@ -22,10 +25,7 @@ interface State
     idOfArticleToDelete: number,
 }
 
-interface Props
-{
-
-}
+interface Props extends RouteComponentProps {}
 
 class Manage extends PureComponent<Props, State>
 {
@@ -120,6 +120,16 @@ class Manage extends PureComponent<Props, State>
         };
     };
 
+    onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
+    {
+        return e =>
+        {
+            e.preventDefault();
+            const {history} = this.props;
+            history.push(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${querystring.encode({id})}`);
+        };
+    };
+
     onDeleteArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
     {
         return () =>
@@ -154,9 +164,10 @@ class Manage extends PureComponent<Props, State>
                       modalOnOk={this.modalOnOk}
                       modalOnCancel={this.modalOnCancel}
                       onArticleTitleClick={this.onArticleTitleClick}
+                      onModifyArticleButtonClick={this.onModifyArticleButtonClick}
                       onDeleteArticleButtonClick={this.onDeleteArticleButtonClick}
                       onDeleteArticleConfirm={this.onDeleteArticleConfirm} />);
     }
 }
 
-export default Manage;
+export default withRouter(Manage);

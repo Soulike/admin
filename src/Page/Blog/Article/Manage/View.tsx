@@ -24,13 +24,14 @@ interface Props
     modalOnOk: ModalProps['onOk'],
     modalOnCancel: ModalProps['onCancel'],
 
+    onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'],
     onDeleteArticleButtonClick: (id: number) => NativeButtonProps['onClick'],
     onDeleteArticleConfirm: PopconfirmProps['onConfirm'],
 }
 
 function ManageView(props: Props)
 {
-    const {articleMap, categoryMap, isLoading, articleInModalHTMLContent, articleInModalTitle, modalIsVisible, modalOnCancel, modalOnOk, onArticleTitleClick, onDeleteArticleButtonClick, onDeleteArticleConfirm} = props;
+    const {articleMap, categoryMap, isLoading, articleInModalHTMLContent, articleInModalTitle, modalIsVisible, modalOnCancel, modalOnOk, onArticleTitleClick, onModifyArticleButtonClick, onDeleteArticleButtonClick, onDeleteArticleConfirm} = props;
     return (
         <div className={Style.Manage}>
             <Skeleton loading={isLoading} active={true} paragraph={{rows: 15}}>
@@ -71,7 +72,7 @@ function ManageView(props: Props)
                             </Tooltip>
                             <Group size={'small'} className={Style.buttonWrapper}>
                                 <Tooltip title={'编辑文章'}>
-                                    <Button type={'primary'} ghost={true}>
+                                    <Button type={'primary'} ghost={true} onClick={onModifyArticleButtonClick(id!)}>
                                         <Icon type="edit" />
                                     </Button>
                                 </Tooltip>
