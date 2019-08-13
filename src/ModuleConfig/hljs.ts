@@ -1,1 +1,0 @@
-import 'highlight.js/scss/vs2015.scss';

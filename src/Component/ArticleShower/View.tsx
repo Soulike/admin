@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import hljs from 'highlight.js';
+import {hljs} from '../../Singleton';
 
 interface Props
 {
