@@ -35,7 +35,10 @@ function FrameView(props: Props)
                 <Button type={'link'}
                         className={Style.exitButton}
                         size={'large'}
-                        onClick={onExitButtonClick}>退出登录</Button>
+                        onClick={onExitButtonClick}>
+                    <Icon type="poweroff" />
+                    退出登录
+                </Button>
             </Header>
             <Layout className={Style.contentLayout}>
                 <Content className={Style.content}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {hljs} from '../../Singleton';
+import 'mathjax';
 
 interface Props
 {
