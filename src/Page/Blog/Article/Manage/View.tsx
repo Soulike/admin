@@ -6,6 +6,7 @@ import ArticlePreviewModal from '../../../../Component/ArticlePreviewModal/View'
 import {ModalProps} from 'antd/lib/modal';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
+import {SwitchProps} from 'antd/lib/switch';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -23,7 +24,9 @@ interface Props
     modalIsVisible: boolean,
     modalOnOk: ModalProps['onOk'],
     modalOnCancel: ModalProps['onCancel'],
+    loadingArticleId: number,
 
+    onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'],
     onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'],
     onDeleteArticleButtonClick: (id: number) => NativeButtonProps['onClick'],
     onDeleteArticleConfirm: PopconfirmProps['onConfirm'],
@@ -31,7 +34,7 @@ interface Props
 
 function ManageView(props: Props)
 {
-    const {articleMap, categoryMap, isLoading, articleInModalHTMLContent, articleInModalTitle, modalIsVisible, modalOnCancel, modalOnOk, onArticleTitleClick, onModifyArticleButtonClick, onDeleteArticleButtonClick, onDeleteArticleConfirm} = props;
+    const {articleMap, categoryMap, isLoading, loadingArticleId, articleInModalHTMLContent, articleInModalTitle, modalIsVisible, modalOnCancel, modalOnOk, onArticleTitleClick, onIsVisibleSwitchClick, onModifyArticleButtonClick, onDeleteArticleButtonClick, onDeleteArticleConfirm} = props;
     return (
         <div className={Style.Manage}>
             <Skeleton loading={isLoading} active={true} paragraph={{rows: 15}}>
@@ -66,7 +69,10 @@ function ManageView(props: Props)
                             </Tag>
                             <Tooltip title={'更改文章可见性'}>
                                 <Switch className={Style.switch}
+                                        onClick={onIsVisibleSwitchClick(id!)}
                                         checked={isVisible}
+                                        disabled={loadingArticleId === id}
+                                        loading={loadingArticleId === id}
                                         checkedChildren={'可见'}
                                         unCheckedChildren={'隐藏'} />
                             </Tooltip>

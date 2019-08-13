@@ -4,19 +4,21 @@ import {Article, Category} from '../../../../Class';
 import {ModalProps} from 'antd/lib/modal';
 import {markdownConverter} from '../../../../Singleton';
 import {message, notification} from 'antd';
-import {deleteArticleById, getAllArticle} from '../../../../Api/Blog/Article';
+import {deleteArticleById, getAllArticle, modifyArticle} from '../../../../Api/Blog/Article';
 import {getAllCategory} from '../../../../Api/Blog/Category';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
 import querystring from 'querystring';
+import {SwitchProps} from 'antd/lib/switch';
 
 interface State
 {
     articleMap: Map<number, Article>;
     categoryMap: Map<number, Category>,
     isLoading: boolean,
+    loadingArticleId: number,
 
     articleInModalTitle: string,
     articleInModalHTMLContent: string,
@@ -36,6 +38,7 @@ class Manage extends PureComponent<Props, State>
             articleMap: new Map<number, Article>(),
             categoryMap: new Map<number, Category>(),
             isLoading: false,
+            loadingArticleId: 0,
 
             articleInModalTitle: '',
             articleInModalHTMLContent: '',
@@ -120,6 +123,30 @@ class Manage extends PureComponent<Props, State>
         };
     };
 
+    onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'] = (id: number) =>
+    {
+        return async checked =>
+        {
+            await this.setStatePromise({loadingArticleId: id});
+            const result = await modifyArticle(new Article(id, undefined, undefined, undefined, undefined, undefined, undefined, checked));
+            if (result !== null)
+            {
+                const {articleMap} = this.state;
+                const article = articleMap.get(id);
+                if (article === undefined)
+                {
+                    message.warning('文章不存在');
+                }
+                else
+                {
+                    article.isVisible = checked;
+                    this.forceUpdate();
+                    await this.setStatePromise({loadingArticleId: 0});
+                }
+            }
+        };
+    };
+
     onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
     {
         return e =>
@@ -154,7 +181,7 @@ class Manage extends PureComponent<Props, State>
 
     render()
     {
-        const {articleMap, categoryMap, modalIsVisible, articleInModalHTMLContent, articleInModalTitle, isLoading} = this.state;
+        const {articleMap, categoryMap, modalIsVisible, loadingArticleId, articleInModalHTMLContent, articleInModalTitle, isLoading} = this.state;
         return (<View isLoading={isLoading}
                       articleMap={articleMap}
                       categoryMap={categoryMap}
@@ -163,7 +190,9 @@ class Manage extends PureComponent<Props, State>
                       articleInModalHTMLContent={articleInModalHTMLContent}
                       modalOnOk={this.modalOnOk}
                       modalOnCancel={this.modalOnCancel}
+                      loadingArticleId={loadingArticleId}
                       onArticleTitleClick={this.onArticleTitleClick}
+                      onIsVisibleSwitchClick={this.onIsVisibleSwitchClick}
                       onModifyArticleButtonClick={this.onModifyArticleButtonClick}
                       onDeleteArticleButtonClick={this.onDeleteArticleButtonClick}
                       onDeleteArticleConfirm={this.onDeleteArticleConfirm} />);
