@@ -1,27 +1,21 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {hljs} from '../../Singleton';
-import 'mathjax';
+import {Skeleton} from 'antd';
 
 interface Props
 {
     HTMLContent: string,
+    loading?: boolean,
 }
 
 function ArticleShowerView(props: Props)
 {
-    const {HTMLContent} = props;
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = HTMLContent;
-    wrapper.querySelectorAll('pre code').forEach((block) =>
-    {
-        hljs.highlightBlock(block);
-    });
 
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub, wrapper]);
-
+    const {HTMLContent, loading} = props;
     return (
-        <article className={Style.ArticleShower} dangerouslySetInnerHTML={{__html: wrapper.innerHTML}} />
+        <Skeleton active={true} loading={loading} paragraph={{rows: 15}}>
+            <article className={Style.ArticleShower} dangerouslySetInnerHTML={{__html: HTMLContent}} />
+        </Skeleton>
     );
 }
 
