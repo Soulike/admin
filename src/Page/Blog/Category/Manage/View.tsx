@@ -1,12 +1,14 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Button, Icon, List, Modal, Popconfirm, Tag, Tooltip} from 'antd';
+import {Button, Icon, List, Popconfirm, Tag, Tooltip} from 'antd';
 import {Category} from '../../../../Class';
-import ArticleList from '../../../../Component/ArticleList/Container';
 import {TagProps} from 'antd/lib/tag';
 import {ModalProps} from 'antd/lib/modal';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
+import ArticleListModal from './Component/ArticleListModal';
+import ModifyModal from './Component/ModifyModal';
+import {InputProps} from 'antd/lib/input';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -22,6 +24,13 @@ interface Props
     onArticleAmountTagClick: (id: number) => TagProps['onClick'],
     onArticleListModalOk: ModalProps['onOk'],
     onArticleListModalCancel: ModalProps['onCancel'],
+
+    onModifyButtonClick: (id: number) => NativeButtonProps['onClick'],
+    isModifyModalVisible: boolean,
+    onModifyModalOk: ModalProps['onOk'],
+    onModifyModalCancel: ModalProps['onCancel'],
+    nameOfCategoryToModify: string,
+    onCategoryNameInputChange: InputProps['onChange'],
 
     onDeleteCategoryButtonClick: (id: number) => NativeButtonProps['onClick'],
     onDeleteCategoryConfirm: PopconfirmProps['onConfirm'],
@@ -39,6 +48,12 @@ function ManageView(props: Props)
         onArticleListModalCancel,
         onDeleteCategoryButtonClick,
         onDeleteCategoryConfirm,
+        isModifyModalVisible,
+        onModifyModalOk,
+        onModifyModalCancel,
+        onModifyButtonClick,
+        nameOfCategoryToModify,
+        onCategoryNameInputChange,
     } = props;
 
     const categoryInModal = categoryMap.get(categoryIdOfArticleListModal);
@@ -60,7 +75,7 @@ function ManageView(props: Props)
                              className={Style.articleAmountTag}>文章：{categoryToArticleNumberMap.get(id!)}</Tag>
                         <Group size={'small'} className={Style.buttonWrapper}>
                             <Tooltip title={'编辑文章分类'}>
-                                <Button type={'primary'} ghost={true}>
+                                <Button type={'primary'} ghost={true} onClick={onModifyButtonClick(id!)}>
                                     <Icon type="edit" />
                                 </Button>
                             </Tooltip>
@@ -75,15 +90,15 @@ function ManageView(props: Props)
                     </Item>);
             }}>
             </List>
-            <Modal title={`分类"${categoryInModal ? categoryInModal.name : ''}"下的文章`}
-                   visible={isArticleListModalVisible}
-                   width={'80vw'}
-                   onOk={onArticleListModalOk}
-                   onCancel={onArticleListModalCancel} destroyOnClose={true}>
-                <div className={Style.articleListModal}>
-                    <ArticleList categoryIdFilter={categoryIdOfArticleListModal} />
-                </div>
-            </Modal>
+            <ArticleListModal visible={isArticleListModalVisible}
+                              categoryInModal={categoryInModal}
+                              onOk={onArticleListModalOk}
+                              onCancel={onArticleListModalCancel} />
+            <ModifyModal visible={isModifyModalVisible}
+                         onOk={onModifyModalOk}
+                         onCancel={onModifyModalCancel}
+                         categoryName={nameOfCategoryToModify}
+                         onCategoryNameInputChange={onCategoryNameInputChange} />
         </div>
     );
 }

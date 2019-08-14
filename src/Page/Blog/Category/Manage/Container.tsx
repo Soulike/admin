@@ -3,10 +3,16 @@ import View from './View';
 import {Category} from '../../../../Class';
 import {TagProps} from 'antd/lib/tag';
 import {ModalProps} from 'antd/lib/modal';
-import {deleteCategoryById, getAllArticleAmountByCategoryId, getAllCategory} from '../../../../Api/Blog/Category';
+import {
+    deleteCategoryById,
+    getAllArticleAmountByCategoryId,
+    getAllCategory,
+    modifyCategory,
+} from '../../../../Api/Blog/Category';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {message, notification} from 'antd';
+import {InputProps} from 'antd/lib/input';
 
 interface Props {}
 
@@ -17,6 +23,10 @@ interface State
 
     isArticleListModalVisible: boolean,
     categoryIdOfArticleListModal: number,
+
+    isModifyModalVisible: boolean,
+    idOfCategoryToModify: number,
+    nameOfCategoryToModify: string,
 
     idOfCategoryToDelete: number,
 }
@@ -32,7 +42,11 @@ class Manage extends PureComponent<Props, State>
             isArticleListModalVisible: false,
             categoryIdOfArticleListModal: 0,
 
+            isModifyModalVisible: false,
+
             idOfCategoryToDelete: 0,
+            idOfCategoryToModify: 0,
+            nameOfCategoryToModify: '',
         };
     }
 
@@ -85,6 +99,51 @@ class Manage extends PureComponent<Props, State>
         });
     };
 
+    onModifyModalOk: ModalProps['onOk'] = async e =>
+    {
+        e.preventDefault();
+        const {idOfCategoryToModify, nameOfCategoryToModify, categoryMap} = this.state;
+        if (nameOfCategoryToModify !== null)
+        {
+            const result = await modifyCategory(new Category(idOfCategoryToModify, nameOfCategoryToModify));
+            if (result !== null)
+            {
+                notification.success({message: '文章分类编辑成功'});
+                categoryMap.get(idOfCategoryToModify)!.name = nameOfCategoryToModify;
+                this.forceUpdate();
+                this.setState({isModifyModalVisible: false});
+            }
+        }
+        else
+        {
+            message.warning('文章分类名不能为空');
+        }
+    };
+
+    onModifyModalCancel: ModalProps['onCancel'] = e =>
+    {
+        e.preventDefault();
+        this.setState({isModifyModalVisible: false});
+    };
+
+    onModifyButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
+    {
+        return () =>
+        {
+            const {categoryMap} = this.state;
+            this.setState({
+                idOfCategoryToModify: id,
+                nameOfCategoryToModify: categoryMap.get(id)!.name!,
+                isModifyModalVisible: true,
+            });
+        };
+    };
+
+    onCategoryNameInputChange: InputProps['onChange'] = e =>
+    {
+        this.setState({nameOfCategoryToModify: e.target.value});
+    };
+
     onDeleteCategoryButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
     {
         return () =>
@@ -118,16 +177,25 @@ class Manage extends PureComponent<Props, State>
 
     render()
     {
-        const {categoryMap, categoryToArticleNumberMap, isArticleListModalVisible, categoryIdOfArticleListModal} = this.state;
+        const {categoryMap, categoryToArticleNumberMap, isArticleListModalVisible, categoryIdOfArticleListModal, isModifyModalVisible, nameOfCategoryToModify} = this.state;
         return (<View categoryMap={categoryMap}
                       categoryToArticleNumberMap={categoryToArticleNumberMap}
+
                       isArticleListModalVisible={isArticleListModalVisible}
                       categoryIdOfArticleListModal={categoryIdOfArticleListModal}
                       onArticleAmountTagClick={this.onArticleAmountTagClick}
                       onArticleListModalOk={this.onArticleListModalOk}
                       onArticleListModalCancel={this.onArticleListModalOk}
+
                       onDeleteCategoryButtonClick={this.onDeleteCategoryButtonClick}
-                      onDeleteCategoryConfirm={this.onDeleteCategoryConfirm} />);
+                      onDeleteCategoryConfirm={this.onDeleteCategoryConfirm}
+
+                      isModifyModalVisible={isModifyModalVisible}
+                      onModifyModalOk={this.onModifyModalOk}
+                      onModifyModalCancel={this.onModifyModalCancel}
+                      onModifyButtonClick={this.onModifyButtonClick}
+                      onCategoryNameInputChange={this.onCategoryNameInputChange}
+                      nameOfCategoryToModify={nameOfCategoryToModify} />);
     }
 }
 
