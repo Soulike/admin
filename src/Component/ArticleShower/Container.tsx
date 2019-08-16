@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import View from './View';
 import {hljs} from '../../Singleton';
+import '../../ModuleConfig/MathJax';
 
 interface Props
 {

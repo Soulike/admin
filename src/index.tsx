@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import Store from './Store';
 import * as serviceWorker from './serviceWorker';
 import Loading from './Component/Loading';
-import './ModuleConfig';
+import './ModuleConfig/Antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import {ConfigProvider} from 'antd';
 
