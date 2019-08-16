@@ -1,5 +1,7 @@
 import 'mathjax';
 
+require('mathjax/config/TeX-AMS_HTML-full');
+
 MathJax.Hub.Config({
     showProcessingMessages: false,
     messageStyle: 'none',
