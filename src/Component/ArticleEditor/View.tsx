@@ -82,13 +82,13 @@ function ArticleEditorView(props: Props)
                 <Checkbox disabled={isSubmittingArticle || isLoadingCategory || isLoadingArticle}
                           checked={isVisible}
                           onChange={onIsVisibleCheckboxChange}>公开文章</Checkbox>
-                <div className={Style.buttonWrapper}>
+                <Button.Group>
                     <Button size={'large'} onClick={onArticlePreviewButtonClick}>预览</Button>
                     <Button loading={isSubmittingArticle}
                             type={'primary'}
                             size={'large'} disabled={isSubmittingArticle || isLoadingCategory || isLoadingArticle}
                             onClick={onSubmitButtonClick}>提交</Button>
-                </div>
+                </Button.Group>
             </div>
             <ArticlePreviewModal title={title}
                                  HTMLContent={HTMLContent}

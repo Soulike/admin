@@ -1,4 +1,8 @@
 .ArticleEditor {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
     .inputGroup {
         .title {
             font-weight: bolder;
@@ -15,17 +19,10 @@
     }
 
     .bottomWrapper {
-        margin-top: 25px;
+        margin-top: 2vh;
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-        .buttonWrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 150px;
-        }
 
         .categorySelect {
             width: 10vw;
