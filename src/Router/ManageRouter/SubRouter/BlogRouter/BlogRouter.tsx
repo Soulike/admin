@@ -3,6 +3,7 @@ import {Route, Switch} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_COMPONENT, PAGE_ID_TO_ROUTE} from '../../../../CONFIG';
 import ArticleRouter from './SubRouter/ArticleRouter';
 import CategoryRouter from './SubRouter/CategoryRouter';
+import OptionRouter from './SubRouter/OptionRouter';
 import NotFound from '../../../../Component/NotFound';
 import BlogFrame from '../../../../Component/BlogFrame';
 
@@ -18,6 +19,8 @@ export default () =>
                        component={ArticleRouter} />
                 <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX]}
                        component={CategoryRouter} />
+                <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.INDEX]}
+                       component={OptionRouter} />
             </BlogFrame>
             <Route render={NotFound} />
         </Switch>

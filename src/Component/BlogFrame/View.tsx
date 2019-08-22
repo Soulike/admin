@@ -58,6 +58,19 @@ function BlogFrameView(props: Props)
                             </Link>
                         </Menu.Item>
                     </SubMenu>
+                    <SubMenu title={
+                        <span>
+                            <Icon type="setting" />
+                            设置
+                        </span>
+                    }>
+                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.OPTION.ABOUT}>
+                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}>
+                                <Icon type="profile" />
+                                关于
+                            </Link>
+                        </Menu.Item>
+                    </SubMenu>
                 </Menu>
             </Sider>
             <Content className={Style.content}>

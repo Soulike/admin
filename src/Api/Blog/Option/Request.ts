@@ -3,31 +3,49 @@ import {GET_ABOUT, SET_ABOUT} from './ROUTE';
 import {Response} from '../../../Class';
 import {message} from 'antd';
 
-export async function getAbout(): Promise<string | null>
+export async function getAbout(): Promise<{ about: string } | null>
 {
-    const {data: {isSuccessful, message: msg, data}}: AxiosResponse<Response<string>> = await axios.get(GET_ABOUT,
-        {params: {_t: Date.now()}});
-    if (isSuccessful)
+    try
     {
-        return data!;
+        const {data: {isSuccessful, message: msg, data}}: AxiosResponse<Response<{ about: string }>> = await axios.get(GET_ABOUT,
+            {params: {_t: Date.now()}});
+        if (isSuccessful)
+        {
+            return data!;
+        }
+        else
+        {
+            message.warning(msg);
+            return null;
+        }
     }
-    else
+    catch (e)
     {
-        message.warning(msg);
+        message.error('网络异常');
+        console.log(e);
         return null;
     }
 }
 
 export async function setAbout(about: string): Promise<true | null>
 {
-    const {data: {isSuccessful, message: msg}}: AxiosResponse<Response<void>> = await axios.post(SET_ABOUT, about);
-    if (isSuccessful)
+    try
     {
-        return true;
+        const {data: {isSuccessful, message: msg}}: AxiosResponse<Response<void>> = await axios.post(SET_ABOUT, {about});
+        if (isSuccessful)
+        {
+            return true;
+        }
+        else
+        {
+            message.warning(msg);
+            return null;
+        }
     }
-    else
+    catch (e)
     {
-        message.warning(msg);
+        message.error('网络异常');
+        console.log(e);
         return null;
     }
 }

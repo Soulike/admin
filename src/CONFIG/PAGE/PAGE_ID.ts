@@ -15,6 +15,10 @@ export const PAGE_ID = {
                 ADD: 'BLOG_CATEGORY_ADD',
                 MANAGE: 'BLOG_CATEGORY_MANAGE',
             },
+            OPTION: {
+                INDEX: 'BLOG_OPTION_INDEX',
+                ABOUT: 'BLOG_OPTION_ABOUT',
+            },
         },
     },
 };

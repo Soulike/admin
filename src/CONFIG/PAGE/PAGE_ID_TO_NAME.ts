@@ -11,4 +11,6 @@ export const PAGE_ID_TO_NAME = {
 
     [PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]: '文章分类添加',
     [PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]: '文章分类管理',
+
+    [PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]: '关于我设置',
 };
