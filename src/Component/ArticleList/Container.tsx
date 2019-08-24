@@ -154,7 +154,6 @@ class ArticleList extends PureComponent<Props, State>
                 else
                 {
                     article.isVisible = checked;
-                    article.modificationTime = (new Date()).toISOString();
                     this.forceUpdate();
                     await this.setStatePromise({loadingArticleId: 0});
                 }
