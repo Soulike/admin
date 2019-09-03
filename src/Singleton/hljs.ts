@@ -15,6 +15,7 @@ hljs.registerLanguage('pgsql', require('highlight.js/lib/languages/pgsql'));
 hljs.registerLanguage('http', require('highlight.js/lib/languages/http'));
 hljs.registerLanguage('json', require('highlight.js/lib/languages/json'));
 hljs.registerLanguage('css', require('highlight.js/lib/languages/css'));
+hljs.registerLanguage('scss', require('highlight.js/lib/languages/scss'));
 hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'));
 hljs.registerLanguage('typescript', require('highlight.js/lib/languages/typescript'));
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
