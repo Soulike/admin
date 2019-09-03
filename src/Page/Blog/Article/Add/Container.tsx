@@ -43,7 +43,7 @@ class Add extends PureComponent<Props, State>
         };
     }
 
-    setStatePromise<K extends keyof State>(state: ((prevState: Readonly<State>, props: Readonly<Props>) => (Pick<State, K> | State | null)) | Pick<State, K> | State | null): Promise<void>
+    setStatePromise(state: any): Promise<void>
     {
         return new Promise<void>(resolve =>
         {
