@@ -7,8 +7,7 @@ export async function getAbout(): Promise<{ about: string } | null>
 {
     try
     {
-        const {data: {isSuccessful, message: msg, data}}: AxiosResponse<Response<{ about: string }>> = await axios.get(GET_ABOUT,
-            {params: {_t: Date.now()}});
+        const {data: {isSuccessful, message: msg, data}}: AxiosResponse<Response<{ about: string }>> = await axios.get(GET_ABOUT);
         if (isSuccessful)
         {
             return data!;

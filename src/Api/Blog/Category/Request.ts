@@ -7,12 +7,7 @@ export async function getAllCategory(): Promise<Array<Category> | null>
 {
     try
     {
-        const {data: response}: AxiosResponse<Response<Array<Category>>> = await axios.get(GET_ALL,
-            {
-                params: {
-                    _t: Date.now(),
-                },
-            });
+        const {data: response}: AxiosResponse<Response<Array<Category>>> = await axios.get(GET_ALL);
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)
         {
@@ -37,7 +32,7 @@ export async function getAllArticleAmountByCategoryId(): Promise<{ [categoryId: 
     try
     {
         const {data: response}: AxiosResponse<Response<{ [categoryId: number]: number }>> =
-            await axios.get(GET_ALL_ARTICLE_AMOUNT_BY_ID, {params: {_t: Date.now()}});
+            await axios.get(GET_ALL_ARTICLE_AMOUNT_BY_ID);
         const {isSuccessful, message: msg, data} = response;
         if (isSuccessful)
         {
@@ -64,7 +59,6 @@ export async function getArticleAmountByCategoryId(id: number): Promise<number |
         const {data: response}: AxiosResponse<Response<number>> = await axios.get(GET_ARTICLE_AMOUNT_BY_ID, {
             params: {
                 json: JSON.stringify({id}),
-                _t: Date.now(),
             },
         });
 
