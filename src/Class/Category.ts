@@ -1,9 +1,10 @@
 export class Category
 {
-    public id?: number;                     // 自增主键
-    public name?: string;                    // 分类名，唯一
+    public id: number;                     // 自增主键
+    public name: string;                    // 分类名，唯一
 
-    constructor(id?: number, name?: string)
+
+    constructor(id: number, name: string)
     {
         this.id = id;
         this.name = name;
