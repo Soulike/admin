@@ -81,7 +81,7 @@ export async function getArticleAmountByCategoryId(id: number): Promise<number |
     }
 }
 
-export async function addCategory(category: Category): Promise<true | null>
+export async function addCategory(category: Omit<Category, 'id'>): Promise<true | null>
 {
     try
     {
@@ -129,7 +129,7 @@ export async function deleteCategoryById(id: number): Promise<true | null>
     }
 }
 
-export async function modifyCategory(category: Category): Promise<true | null>
+export async function modifyCategory(category: Partial<Category> & Pick<Category, 'id'>): Promise<true | null>
 {
     try
     {

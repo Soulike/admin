@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import View from './View';
-import {Article, Category} from '../../../../Class';
+import {Category} from '../../../../Class';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {NativeButtonProps} from 'antd/lib/button/button';
@@ -54,9 +54,9 @@ class Add extends PureComponent<Props, State>
         });
     }
 
-    componentDidMount()
+    async componentDidMount()
     {
-        this.getCategoryOption();
+        await this.getCategoryOption();
     }
 
     onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
@@ -119,16 +119,7 @@ class Add extends PureComponent<Props, State>
         else
         {
             await this.setStatePromise({isSubmittingArticle: true});
-            const result = await addArticle(
-                new Article(
-                    undefined,
-                    title,
-                    content,
-                    category,
-                    undefined,
-                    undefined,
-                    undefined,
-                    isVisible));
+            const result = await addArticle({title, category, content, isVisible});
             await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {

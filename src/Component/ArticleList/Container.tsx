@@ -142,7 +142,7 @@ class ArticleList extends PureComponent<Props, State>
         return async checked =>
         {
             await this.setStatePromise({loadingArticleId: id});
-            const result = await modifyArticle(new Article(id, undefined, undefined, undefined, undefined, undefined, undefined, checked));
+            const result = await modifyArticle({id, isVisible: checked});
             if (result !== null)
             {
                 const {articleMap} = this.state;

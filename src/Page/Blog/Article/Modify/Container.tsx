@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import View from './View';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
-import {Article, Category} from '../../../../Class';
+import {Category} from '../../../../Class';
 import querystring from 'querystring';
 import {message, notification} from 'antd';
 import {getAllCategory} from '../../../../Api/Blog/Category';
@@ -157,16 +157,7 @@ class Modify extends PureComponent<Props, State>
         else
         {
             await this.setStatePromise({isSubmittingArticle: true});
-            const result = await modifyArticle(
-                new Article(
-                    id,
-                    title,
-                    content,
-                    category,
-                    undefined,
-                    undefined,
-                    undefined,
-                    isVisible));
+            const result = await modifyArticle({id, title, content, category, isVisible});
             await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {

@@ -87,7 +87,7 @@ export async function getArticleByCategory(category: number): Promise<Array<Arti
     }
 }
 
-export async function addArticle(article: Article): Promise<true | null>
+export async function addArticle(article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>): Promise<true | null>
 {
     try
     {
@@ -135,7 +135,7 @@ export async function deleteArticleById(id: number): Promise<true | null>
     }
 }
 
-export async function modifyArticle(article: Article): Promise<true | null>
+export async function modifyArticle(article: Pick<Article, 'id'> & Partial<Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>>): Promise<true | null>
 {
     try
     {
