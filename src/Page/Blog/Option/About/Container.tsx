@@ -4,7 +4,7 @@ import {TextAreaProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {ModalProps} from 'antd/lib/modal';
 import {message, notification} from 'antd';
-import {getAbout, setAbout} from '../../../../Api/Blog/Option';
+import {Blog} from '../../../../Api';
 
 interface Props {}
 
@@ -29,7 +29,7 @@ class About extends PureComponent<Props, State>
 
     async componentDidMount()
     {
-        const result = await getAbout();
+        const result = await Blog.Option.get();
         if (result !== null)
         {
             const {about} = result;
@@ -56,7 +56,7 @@ class About extends PureComponent<Props, State>
         const {about} = this.state;
         if (about.length !== 0)
         {
-            const result = await setAbout(about);
+            const result = await Blog.Option.set(about);
             if (result !== null)
             {
                 notification.success({message: '修改关于成功'});

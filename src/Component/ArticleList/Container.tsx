@@ -4,8 +4,7 @@ import {Article, Category} from '../../Class';
 import {ModalProps} from 'antd/lib/modal';
 import {markdownConverter} from '../../Singleton';
 import {message, notification} from 'antd';
-import {deleteArticleById, getAllArticle, getArticleByCategory, modifyArticle} from '../../Api/Blog/Article';
-import {getAllCategory} from '../../Api/Blog/Category';
+import {Blog} from '../../Api';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
@@ -71,15 +70,15 @@ class ArticleList extends PureComponent<Props, State>
                 if (typeof categoryIdFilter === 'undefined')
                 {
                     return Promise.all([
-                        getAllArticle(),
-                        getAllCategory(),
+                        Blog.Article.getAll(),
+                        Blog.Category.getAll(),
                     ]);
                 }
                 else
                 {
                     return Promise.all([
-                        getArticleByCategory(categoryIdFilter),
-                        getAllCategory(),
+                        Blog.Article.getByCategory(categoryIdFilter),
+                        Blog.Category.getAll(),
                     ]);
                 }
             })
@@ -142,7 +141,7 @@ class ArticleList extends PureComponent<Props, State>
         return async checked =>
         {
             await this.setStatePromise({loadingArticleId: id});
-            const result = await modifyArticle({id, isVisible: checked});
+            const result = await Blog.Article.modify({id, isVisible: checked});
             if (result !== null)
             {
                 const {articleMap} = this.state;
@@ -182,7 +181,7 @@ class ArticleList extends PureComponent<Props, State>
     onDeleteArticleConfirm: PopconfirmProps['onConfirm'] = async () =>
     {
         const {idOfArticleToDelete, articleMap} = this.state;
-        const result = await deleteArticleById(idOfArticleToDelete);
+        const result = await Blog.Article.deleteById(idOfArticleToDelete);
         if (result !== null)
         {
             notification.success({

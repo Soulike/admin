@@ -4,7 +4,7 @@ import {Category} from '../../../../Class';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {addArticle, getAllCategory} from '../../../../Api';
+import {Blog} from '../../../../Api';
 import {message, notification} from 'antd';
 import {CheckboxProps} from 'antd/lib/checkbox';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
@@ -72,7 +72,7 @@ class Add extends PureComponent<Props, State>
     getCategoryOption = async () =>
     {
         await this.setStatePromise({isLoadingCategory: true});
-        const category = await getAllCategory();
+        const category = await Blog.Category.getAll();
         if (category !== null)
         {
             this.setState({categoryOption: category});
@@ -119,7 +119,7 @@ class Add extends PureComponent<Props, State>
         else
         {
             await this.setStatePromise({isSubmittingArticle: true});
-            const result = await addArticle({title, category, content, isVisible});
+            const result = await Blog.Article.add({title, category, content, isVisible});
             await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {

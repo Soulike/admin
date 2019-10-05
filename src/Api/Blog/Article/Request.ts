@@ -3,7 +3,7 @@ import {Article, Response} from '../../../Class';
 import {ADD, DELETE_BY_ID, GET_ALL, GET_BY_CATEGORY, GET_BY_ID, MODIFY} from './ROUTE';
 import {message} from 'antd';
 
-export async function getArticleById(id: number): Promise<Article | null>
+export async function getById(id: number): Promise<Article | null>
 {
     try
     {
@@ -32,7 +32,7 @@ export async function getArticleById(id: number): Promise<Article | null>
     }
 }
 
-export async function getAllArticle(): Promise<Array<Article> | null>
+export async function getAll(): Promise<Array<Article> | null>
 {
     try
     {
@@ -57,7 +57,7 @@ export async function getAllArticle(): Promise<Array<Article> | null>
     }
 }
 
-export async function getArticleByCategory(category: number): Promise<Array<Article> | null>
+export async function getByCategory(category: number): Promise<Array<Article> | null>
 {
     try
     {
@@ -87,7 +87,7 @@ export async function getArticleByCategory(category: number): Promise<Array<Arti
     }
 }
 
-export async function addArticle(article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>): Promise<true | null>
+export async function add(article: Pick<Article, 'title' | 'content' | 'category' | 'isVisible'>): Promise<true | null>
 {
     try
     {
@@ -111,7 +111,7 @@ export async function addArticle(article: Pick<Article, 'title' | 'content' | 'c
     }
 }
 
-export async function deleteArticleById(id: number): Promise<true | null>
+export async function deleteById(id: number): Promise<true | null>
 {
     try
     {
@@ -135,7 +135,7 @@ export async function deleteArticleById(id: number): Promise<true | null>
     }
 }
 
-export async function modifyArticle(article: Pick<Article, 'id'> & Partial<Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>>): Promise<true | null>
+export async function modify(article: Pick<Article, 'id'> & Partial<Omit<Article, 'publicationTime' | 'modificationTime' | 'pageViews'>>): Promise<true | null>
 {
     try
     {

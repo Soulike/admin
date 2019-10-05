@@ -3,12 +3,7 @@ import View from './View';
 import {Category} from '../../../../Class';
 import {TagProps} from 'antd/lib/tag';
 import {ModalProps} from 'antd/lib/modal';
-import {
-    deleteCategoryById,
-    getAllArticleAmountByCategoryId,
-    getAllCategory,
-    modifyCategory,
-} from '../../../../Api/Blog/Category';
+import {Blog} from '../../../../Api';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {message, notification} from 'antd';
@@ -53,8 +48,8 @@ class Manage extends PureComponent<Props, State>
     componentDidMount()
     {
         Promise.all([
-            getAllCategory(),
-            getAllArticleAmountByCategoryId(),
+            Blog.Category.getAll(),
+            Blog.Category.getAllArticleAmountById(),
         ])
             .then(([categoryList, articleAmountOfCategory]) =>
             {
@@ -105,7 +100,7 @@ class Manage extends PureComponent<Props, State>
         const {idOfCategoryToModify, nameOfCategoryToModify, categoryMap} = this.state;
         if (nameOfCategoryToModify !== null)
         {
-            const result = await modifyCategory(new Category(idOfCategoryToModify, nameOfCategoryToModify));
+            const result = await Blog.Category.modify(new Category(idOfCategoryToModify, nameOfCategoryToModify));
             if (result !== null)
             {
                 notification.success({message: '文章分类编辑成功'});
@@ -161,7 +156,7 @@ class Manage extends PureComponent<Props, State>
         }
         else
         {
-            const result = await deleteCategoryById(idOfCategoryToDelete);
+            const result = await Blog.Category.deleteById(idOfCategoryToDelete);
             if (result !== null)
             {
                 notification.success({

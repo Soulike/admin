@@ -3,7 +3,7 @@ import {message} from 'antd';
 import axios, {AxiosResponse} from 'axios';
 import {ADD, DELETE_BY_ID, GET_ALL, GET_ALL_ARTICLE_AMOUNT_BY_ID, GET_ARTICLE_AMOUNT_BY_ID, MODIFY} from './ROUTE';
 
-export async function getAllCategory(): Promise<Array<Category> | null>
+export async function getAll(): Promise<Array<Category> | null>
 {
     try
     {
@@ -27,7 +27,7 @@ export async function getAllCategory(): Promise<Array<Category> | null>
     }
 }
 
-export async function getAllArticleAmountByCategoryId(): Promise<{ [categoryId: number]: number } | null>
+export async function getAllArticleAmountById(): Promise<{ [categoryId: number]: number } | null>
 {
     try
     {
@@ -52,7 +52,7 @@ export async function getAllArticleAmountByCategoryId(): Promise<{ [categoryId: 
     }
 }
 
-export async function getArticleAmountByCategoryId(id: number): Promise<number | null>
+export async function getArticleAmountById(id: number): Promise<number | null>
 {
     try
     {
@@ -81,7 +81,7 @@ export async function getArticleAmountByCategoryId(id: number): Promise<number |
     }
 }
 
-export async function addCategory(category: Omit<Category, 'id'>): Promise<true | null>
+export async function add(category: Omit<Category, 'id'>): Promise<true | null>
 {
     try
     {
@@ -105,7 +105,7 @@ export async function addCategory(category: Omit<Category, 'id'>): Promise<true 
     }
 }
 
-export async function deleteCategoryById(id: number): Promise<true | null>
+export async function deleteById(id: number): Promise<true | null>
 {
     try
     {
@@ -129,7 +129,7 @@ export async function deleteCategoryById(id: number): Promise<true | null>
     }
 }
 
-export async function modifyCategory(category: Partial<Category> & Pick<Category, 'id'>): Promise<true | null>
+export async function modify(category: Partial<Category> & Pick<Category, 'id'>): Promise<true | null>
 {
     try
     {

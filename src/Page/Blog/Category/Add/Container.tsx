@@ -3,7 +3,7 @@ import View from './View';
 import {InputProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {message, notification} from 'antd';
-import {addCategory} from '../../../../Api';
+import {Blog} from '../../../../Api';
 
 interface Props {}
 
@@ -51,7 +51,7 @@ class Add extends PureComponent<Props, State>
         else
         {
             await this.setStatePromise({isSubmitting: true});
-            const result = await addCategory({name: categoryName});
+            const result = await Blog.Category.add({name: categoryName});
             await this.setStatePromise({isSubmitting: false});
             if (result !== null)
             {

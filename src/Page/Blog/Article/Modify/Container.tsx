@@ -4,8 +4,7 @@ import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {Category} from '../../../../Class';
 import querystring from 'querystring';
 import {message, notification} from 'antd';
-import {getAllCategory} from '../../../../Api/Blog/Category';
-import {getArticleById, modifyArticle} from '../../../../Api/Blog/Article';
+import {Blog} from '../../../../Api';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {markdownConverter} from '../../../../Singleton';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
@@ -84,8 +83,8 @@ class Modify extends PureComponent<Props, State>
                     .then(() =>
                     {
                         return Promise.all([
-                            getAllCategory(),
-                            getArticleById(id),
+                            Blog.Category.getAll(),
+                            Blog.Article.getById(id),
                         ]);
                     })
                     .then(([categoryList, article]) =>
@@ -157,7 +156,7 @@ class Modify extends PureComponent<Props, State>
         else
         {
             await this.setStatePromise({isSubmittingArticle: true});
-            const result = await modifyArticle({id, title, content, category, isVisible});
+            const result = await Blog.Article.modify({id, title, content, category, isVisible});
             await this.setStatePromise({isSubmittingArticle: false});
             if (result !== null)
             {
