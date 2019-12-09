@@ -1,2 +1,0 @@
-(window.webpackJsonpadmin=window.webpackJsonpadmin||[]).push([[19],{329:function(e,a,n){e.exports={BlogIndex:"Style_BlogIndex__1Qixj",image:"Style_image__2stfc"}},330:function(e,a,n){e.exports=n.p+"static/media/macbook.eef1dd97.svg"},367:function(e,a,n){"use strict";n.r(a);var t=n(0),i=n.n(t),o=n(329),c=n.n(o),m=n(330),s=n.n(m);var d=i.a.memo((function(){return i.a.createElement("div",{className:c.a.BlogIndex},i.a.createElement("img",{className:c.a.image,src:s.a,alt:"manage_index"}))}));a.default=d}}]);
-//# sourceMappingURL=19.813f160f.chunk.js.map
