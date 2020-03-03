@@ -1,8 +1,16 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Icon, Layout, Menu} from 'antd';
+import {Layout, Menu} from 'antd';
 import {Link, RouteComponentProps, withRouter} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG/PAGE';
+import {
+    FileTextFilled,
+    InfoCircleOutlined,
+    PlusCircleOutlined,
+    ProfileOutlined,
+    SettingOutlined,
+    TagsFilled,
+} from '@ant-design/icons';
 
 const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
@@ -22,51 +30,51 @@ function BlogFrameView(props: Props)
                       mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location.pathname]]}>
                     <SubMenu title={
                         <span>
-                            <Icon type="file-text" theme="filled" />
+                            <FileTextFilled />
                             文章
                         </span>
                     }>
                         <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.ADD}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}>
-                                <Icon type="plus-circle" />
+                                <PlusCircleOutlined />
                                 添加
                             </Link>
                         </Menu.Item>
                         <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}>
-                                <Icon type="info-circle" />
+                                <InfoCircleOutlined />
                                 管理
                             </Link>
                         </Menu.Item>
                     </SubMenu>
                     <SubMenu title={
                         <span>
-                            <Icon type="tags" theme="filled" />
+                            <TagsFilled />
                             文章分类
                         </span>
                     }>
                         <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.ADD}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}>
-                                <Icon type="plus-circle" />
+                                <PlusCircleOutlined />
                                 添加
                             </Link>
                         </Menu.Item>
                         <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}>
-                                <Icon type="info-circle" />
+                                <InfoCircleOutlined />
                                 管理
                             </Link>
                         </Menu.Item>
                     </SubMenu>
                     <SubMenu title={
                         <span>
-                            <Icon type="setting" />
+                            <SettingOutlined />
                             设置
                         </span>
                     }>
                         <Menu.Item key={PAGE_ID.MANAGE.BLOG.OPTION.ABOUT}>
                             <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}>
-                                <Icon type="profile" />
+                                <ProfileOutlined />
                                 关于
                             </Link>
                         </Menu.Item>

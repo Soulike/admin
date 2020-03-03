@@ -1,11 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, {DOMAttributes, PureComponent} from 'react';
 import LoginView from './View';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {Account} from '../../Api';
 import {notification} from 'antd';
 import {InputProps} from 'antd/lib/input';
-import {FormProps} from 'antd/lib/form';
 
 interface Props extends RouteComponentProps {}
 
@@ -49,7 +48,7 @@ class Login extends PureComponent<Props, State>
         this.setState({password: e.target.value});
     };
 
-    onLoginFormSubmit: FormProps['onSubmit'] = async e =>
+    onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'] = async e =>
     {
         e.preventDefault();
         const {username, password} = this.state;

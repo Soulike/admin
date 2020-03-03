@@ -90,9 +90,9 @@ class Add extends PureComponent<Props, State>
         this.setState({content: e.target.value});
     };
 
-    onCategorySelectorChange: SelectProps['onChange'] = value =>
+    onCategorySelectorChange: SelectProps<number>['onChange'] = value =>
     {
-        this.setState({category: value as number}); // 在 View 中设置的是 number
+        this.setState({category: value}); // 在 View 中设置的是 number
     };
 
     onIsVisibleCheckboxChange: CheckboxProps['onChange'] = e =>

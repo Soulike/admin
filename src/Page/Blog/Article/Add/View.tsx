@@ -16,7 +16,7 @@ interface Props
     categoryOption: Array<Category>,
     onTitleInputChange: InputProps['onChange'],
     onContentTextAreaChange: TextAreaProps['onChange'],
-    onCategorySelectorChange: SelectProps['onChange'],
+    onCategorySelectorChange: SelectProps<number>['onChange'],
     onIsVisibleCheckboxChange: CheckboxProps['onChange'],
     onSubmitButtonClick: NativeButtonProps['onClick'],
     isLoadingCategory: boolean,

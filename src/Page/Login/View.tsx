@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {DOMAttributes} from 'react';
 import Style from './Style.module.scss';
-import {Button, Icon, Input} from 'antd';
+import {Button, Input} from 'antd';
 import web_developer from '../../Static/Login/web_developer.svg';
 import {InputProps} from 'antd/lib/input';
-import {FormProps} from 'antd/lib/form';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
 
 interface Props
 {
@@ -11,7 +11,7 @@ interface Props
     password: string,
     onUsernameInputChange: InputProps['onChange'],
     onPasswordInputChange: InputProps['onChange'],
-    onLoginFormSubmit: FormProps['onSubmit'],
+    onLoginFormSubmit: DOMAttributes<HTMLFormElement>['onSubmit'],
 }
 
 function LoginView(props: Props)
@@ -27,13 +27,13 @@ function LoginView(props: Props)
                        autoFocus={true}
                        value={username}
                        placeholder={'用户名'}
-                       prefix={<Icon type="user" />} />
+                       prefix={<UserOutlined />} />
                 <Input type={'password'}
                        size={'large'}
                        onChange={onPasswordInputChange}
                        value={password}
                        placeholder={'密码'}
-                       prefix={<Icon type="lock" />} />
+                       prefix={<LockOutlined />} />
                 <Button htmlType={'submit'}
                         className={Style.button}
                         size={'large'}

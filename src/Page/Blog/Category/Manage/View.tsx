@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Button, Icon, List, Popconfirm, Tag, Tooltip} from 'antd';
+import {Button, List, Popconfirm, Tag, Tooltip} from 'antd';
 import {Category} from '../../../../Class';
 import {TagProps} from 'antd/lib/tag';
 import {ModalProps} from 'antd/lib/modal';
@@ -9,6 +9,7 @@ import {PopconfirmProps} from 'antd/lib/popconfirm';
 import ArticleListModal from './Component/ArticleListModal';
 import ModifyModal from './Component/ModifyModal';
 import {InputProps} from 'antd/lib/input';
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -76,13 +77,13 @@ function ManageView(props: Props)
                         <Group size={'small'} className={Style.buttonWrapper}>
                             <Tooltip title={'编辑文章分类'}>
                                 <Button type={'primary'} ghost={true} onClick={onModifyButtonClick(id!)}>
-                                    <Icon type="edit" />
+                                    <EditOutlined />
                                 </Button>
                             </Tooltip>
                             <Tooltip title={'删除文章分类'}>
                                 <Popconfirm title={`确认删除文章分类 "${name}"？`} onConfirm={onDeleteCategoryConfirm}>
                                     <Button type={'danger'} ghost={true} onClick={onDeleteCategoryButtonClick(id!)}>
-                                        <Icon type="delete" />
+                                        <DeleteOutlined />
                                     </Button>
                                 </Popconfirm>
                             </Tooltip>

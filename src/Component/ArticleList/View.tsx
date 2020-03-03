@@ -1,12 +1,13 @@
 import React, {DOMAttributes} from 'react';
 import Style from './Style.module.scss';
 import {Article, Category} from '../../Class';
-import {Button, Icon, List, Popconfirm, Skeleton, Switch, Tag, Tooltip} from 'antd';
+import {Button, List, Popconfirm, Skeleton, Switch, Tag, Tooltip} from 'antd';
 import ArticlePreviewModal from '../../Component/ArticlePreviewModal/View';
 import {ModalProps} from 'antd/lib/modal';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {SwitchProps} from 'antd/lib/switch';
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -85,7 +86,7 @@ function ArticleListView(props: Props)
                                           <Button type={'primary'}
                                                   ghost={true}
                                                   onClick={onModifyArticleButtonClick(id!)}>
-                                              <Icon type="edit" />
+                                              <EditOutlined />
                                           </Button>
                                       </Tooltip>
                                       <Tooltip title={'删除文章'}>
@@ -93,7 +94,7 @@ function ArticleListView(props: Props)
                                               <Button type={'danger'}
                                                       ghost={true}
                                                       onClick={onDeleteArticleButtonClick(id!)}>
-                                                  <Icon type="delete" />
+                                                  <DeleteOutlined />
                                               </Button>
                                           </Popconfirm>
                                       </Tooltip>
