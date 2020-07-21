@@ -1,11 +1,13 @@
+import 'highlight.js';
 import 'highlight.js/scss/vs2015.scss';
 
-const hljs = require('highlight.js/lib/highlight');
+const hljs = require('highlight.js/lib/core');
 
 hljs.registerLanguage('makefile', require('highlight.js/lib/languages/makefile'));
 hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'));
 hljs.registerLanguage('cmake', require('highlight.js/lib/languages/cmake'));
 hljs.registerLanguage('cpp', require('highlight.js/lib/languages/cpp'));
+hljs.registerLanguage('c', require('highlight.js/lib/languages/cpp'));
 hljs.registerLanguage('java', require('highlight.js/lib/languages/java'));
 
 hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'));
