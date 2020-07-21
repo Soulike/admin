@@ -91,7 +91,7 @@ function ArticleListView(props: Props)
                                       </Tooltip>
                                       <Tooltip title={'删除文章'}>
                                           <Popconfirm title={`确认删除文章《${title}》？`} onConfirm={onDeleteArticleConfirm}>
-                                              <Button type={'danger'}
+                                              <Button danger={true}
                                                       ghost={true}
                                                       onClick={onDeleteArticleButtonClick(id!)}>
                                                   <DeleteOutlined />

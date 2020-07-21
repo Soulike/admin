@@ -82,7 +82,7 @@ function ManageView(props: Props)
                             </Tooltip>
                             <Tooltip title={'删除文章分类'}>
                                 <Popconfirm title={`确认删除文章分类 "${name}"？`} onConfirm={onDeleteCategoryConfirm}>
-                                    <Button type={'danger'} ghost={true} onClick={onDeleteCategoryButtonClick(id!)}>
+                                    <Button danger={true} ghost={true} onClick={onDeleteCategoryButtonClick(id!)}>
                                         <DeleteOutlined />
                                     </Button>
                                 </Popconfirm>
