@@ -5,7 +5,7 @@
   "proxy": "https://test.soulike.tech:8001",
   "dependencies": {
     "@ant-design/icons": "^4.0.2",
-    "@types/faker": "^4.1.5",
+    "@types/faker": "^5.1.0",
     "@types/highlight.js": "^9.12.3",
     "@types/jest": "^26.0.5",
     "@types/mathjax": "0.0.35",
