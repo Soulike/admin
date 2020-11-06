@@ -123,15 +123,15 @@ class Manage extends PureComponent<Props, State>
 
     onModifyButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
     {
-        return () =>
+        return () => this.setState(() =>
         {
             const {categoryMap} = this.state;
-            this.setState({
+            return {
                 idOfCategoryToModify: id,
                 nameOfCategoryToModify: categoryMap.get(id)!.name!,
                 isModifyModalVisible: true,
-            });
-        };
+            };
+        });
     };
 
     onCategoryNameInputChange: InputProps['onChange'] = e =>
