@@ -1,0 +1,2 @@
+(this.webpackJsonpadmin=this.webpackJsonpadmin||[]).push([[20],{349:function(a,e,n){a.exports={ManageIndex:"Style_ManageIndex__rxah9",image:"Style_image__ml7iL"}},571:function(a,e,n){"use strict";n.r(e);var i=n(16),t=n(0),s=n.n(t),c=n(349),m=n.n(c),r=n.p+"static/media/network_2.1f2643bb.svg";function d(){return Object(i.jsx)("div",{className:m.a.ManageIndex,children:Object(i.jsx)("img",{className:m.a.image,src:r,alt:"manage_index"})})}var g=s.a.memo(d);e.default=g}}]);
+//# sourceMappingURL=20.655a3cb9.chunk.js.map
