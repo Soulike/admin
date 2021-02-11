@@ -1,4 +1,4 @@
-import React, {DOMAttributes, PureComponent} from 'react';
+import React, {DOMAttributes, useEffect, useState} from 'react';
 import View from './View';
 import {Article, Category} from '../../Class';
 import {ModalProps} from 'antd/lib/modal';
@@ -7,119 +7,101 @@ import {message, notification} from 'antd';
 import {Blog} from '../../Api';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {RouteComponentProps, withRouter} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {useHistory} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
 import querystring from 'querystring';
 import {SwitchProps} from 'antd/lib/switch';
 
-interface State
-{
-    articleMap: Map<number, Article>;
-    categoryMap: Map<number, Category>,
-    isLoading: boolean,
-    loadingArticleId: number,
-
-    articleInModalTitle: string,
-    articleInModalHTMLContent: string,
-    modalIsVisible: boolean,
-
-    idOfArticleToDelete: number,
-}
-
-interface Props extends RouteComponentProps
+interface IProps
 {
     categoryIdFilter?: number, // 限定文章的分类
 }
 
-class ArticleList extends PureComponent<Props, State>
+function ArticleList(props: IProps)
 {
-    constructor(props: Props)
+    const [articleMap, setArticleMap] = useState(new Map<number, Article>());
+    const [categoryMap, setCategoryMap] = useState(new Map<number, Category>());
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingArticleId, setLoadingArticleId] = useState(0);
+
+    const [articleInModalTitle, setArticleInModalTitle] = useState('');
+    const [articleInModalHTMLContent, setArticleInModalHTMLContent] = useState('');
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+
+    const [idOfArticleToDelete, setIdOfArticleToDelete] = useState(0);
+
+    const history = useHistory();
+
+    const {categoryIdFilter} = props;
+
+    useEffect(() =>
     {
-        super(props);
-        this.state = {
-            articleMap: new Map<number, Article>(),
-            categoryMap: new Map<number, Category>(),
-            isLoading: false,
-            loadingArticleId: 0,
-
-            articleInModalTitle: '',
-            articleInModalHTMLContent: '',
-            modalIsVisible: false,
-
-            idOfArticleToDelete: 0,
-        };
-    }
-
-    setStatePromise(state: any): Promise<void>
-    {
-        return new Promise<void>(resolve =>
-        {
-            this.setState(state, () =>
+        setIsLoading(true);
+        Blog.Category.getAll()
+            .then((categoryList) =>
             {
-                resolve();
-            });
-        });
-    }
-
-    componentDidMount()
-    {
-        const {categoryIdFilter} = this.props;
-        this.setStatePromise({isLoading: true})
-            .then(() =>
-            {
-                if (typeof categoryIdFilter === 'undefined')
+                if (categoryList !== null)
                 {
-                    return Promise.all([
-                        Blog.Article.getAll(),
-                        Blog.Category.getAll(),
-                    ]);
-                }
-                else
-                {
-                    return Promise.all([
-                        Blog.Article.getByCategory(categoryIdFilter),
-                        Blog.Category.getAll(),
-                    ]);
-                }
-            })
-            .then(([articleList, categoryList]) =>
-            {
-                if (articleList !== null && categoryList !== null)
-                {
-                    const articleMap: Map<number, Article> = new Map<number, Article>();
                     const categoryMap: Map<number, Category> = new Map<number, Category>();
-                    articleList.forEach(article =>
-                    {
-                        articleMap.set(article.id!, article);
-                    });
                     categoryList.forEach(category =>
                     {
                         categoryMap.set(category.id!, category);
                     });
-
-                    return this.setStatePromise({articleMap, categoryMap});
+                    setCategoryMap(categoryMap);
                 }
             })
+            .finally(() =>
+            {
+                setIsLoading(false);
+            });
+    }, []);
+
+    useEffect(() =>
+    {
+        setIsLoading(true);
+        Promise.resolve()
             .then(() =>
             {
-                return this.setStatePromise({isLoading: false});
-            });
-    }
+                if (typeof categoryIdFilter === 'undefined')
+                {
+                    return Blog.Article.getAll();
+                }
+                else
+                {
+                    return Blog.Article.getByCategory(categoryIdFilter);
+                }
+            })
+            .then((articleList) =>
+            {
+                if (articleList !== null)
+                {
+                    const articleMap: Map<number, Article> = new Map<number, Article>();
+                    articleList.forEach(article =>
+                    {
+                        articleMap.set(article.id!, article);
+                    });
 
-    modalOnOk: ModalProps['onOk'] = () =>
+                    setArticleMap(articleMap);
+                }
+            })
+            .finally(() =>
+            {
+                setIsLoading(false);
+            });
+    }, [categoryIdFilter]);
+
+    const modalOnOk: ModalProps['onOk'] = () =>
     {
-        const {modalIsVisible} = this.state;
-        this.setState({modalIsVisible: !modalIsVisible});
+        setModalIsVisible(!modalIsVisible);
     };
 
-    modalOnCancel: ModalProps['onCancel'] = this.modalOnOk;
+    const modalOnCancel: ModalProps['onCancel'] = modalOnOk;
 
-    onArticleTitleClick: (id: number) => DOMAttributes<HTMLSpanElement>['onClick'] = (id: number) =>
+    const onArticleTitleClick: (id: number) => DOMAttributes<HTMLSpanElement>['onClick'] = (id: number) =>
     {
         return e =>
         {
             e.preventDefault();
-            const {articleMap} = this.state;
             const article = articleMap.get(id);
             if (typeof article === 'undefined')
             {
@@ -127,24 +109,21 @@ class ArticleList extends PureComponent<Props, State>
             }
             else
             {
-                this.setState({
-                    articleInModalTitle: article.title!,
-                    articleInModalHTMLContent: markdownConverter.makeHtml(article.content!),
-                    modalIsVisible: true,
-                });
+                setArticleInModalTitle(article.title);
+                setArticleInModalHTMLContent(markdownConverter.makeHtml(article.content));
+                setModalIsVisible(true);
             }
         };
     };
 
-    onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'] = (id: number) =>
+    const onIsVisibleSwitchClick: (id: number) => SwitchProps['onClick'] = (id: number) =>
     {
         return async checked =>
         {
-            await this.setStatePromise({loadingArticleId: id});
+            setLoadingArticleId(id);
             const result = await Blog.Article.modify({id, isVisible: checked});
             if (result !== null)
             {
-                const {articleMap} = this.state;
                 const article = articleMap.get(id);
                 if (article === undefined)
                 {
@@ -153,34 +132,32 @@ class ArticleList extends PureComponent<Props, State>
                 else
                 {
                     article.isVisible = checked;
-                    this.forceUpdate();
-                    await this.setStatePromise({loadingArticleId: 0});
+                    setArticleMap(new Map(articleMap));
+                    setLoadingArticleId(0);
                 }
             }
         };
     };
 
-    onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
+    const onModifyArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
     {
         return e =>
         {
             e.preventDefault();
-            const {history} = this.props;
             history.push(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${querystring.encode({id})}`);
         };
     };
 
-    onDeleteArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
+    const onDeleteArticleButtonClick: (id: number) => NativeButtonProps['onClick'] = (id: number) =>
     {
         return () =>
         {
-            this.setState({idOfArticleToDelete: id});
+            setIdOfArticleToDelete(id);
         };
     };
 
-    onDeleteArticleConfirm: PopconfirmProps['onConfirm'] = async () =>
+    const onDeleteArticleConfirm: PopconfirmProps['onConfirm'] = async () =>
     {
-        const {idOfArticleToDelete, articleMap} = this.state;
         const result = await Blog.Article.deleteById(idOfArticleToDelete);
         if (result !== null)
         {
@@ -188,28 +165,24 @@ class ArticleList extends PureComponent<Props, State>
                 message: '文章删除成功',
             });
             articleMap.delete(idOfArticleToDelete);
-            this.forceUpdate();
+            setArticleMap(new Map(articleMap));
         }
     };
 
-    render()
-    {
-        const {articleMap, categoryMap, modalIsVisible, loadingArticleId, articleInModalHTMLContent, articleInModalTitle, isLoading} = this.state;
-        return (<View isLoading={isLoading}
-                      articleMap={articleMap}
-                      categoryMap={categoryMap}
-                      modalIsVisible={modalIsVisible}
-                      articleInModalTitle={articleInModalTitle}
-                      articleInModalHTMLContent={articleInModalHTMLContent}
-                      modalOnOk={this.modalOnOk}
-                      modalOnCancel={this.modalOnCancel}
-                      loadingArticleId={loadingArticleId}
-                      onArticleTitleClick={this.onArticleTitleClick}
-                      onIsVisibleSwitchClick={this.onIsVisibleSwitchClick}
-                      onModifyArticleButtonClick={this.onModifyArticleButtonClick}
-                      onDeleteArticleButtonClick={this.onDeleteArticleButtonClick}
-                      onDeleteArticleConfirm={this.onDeleteArticleConfirm} />);
-    }
+    return (<View isLoading={isLoading}
+                  articleMap={articleMap}
+                  categoryMap={categoryMap}
+                  modalIsVisible={modalIsVisible}
+                  articleInModalTitle={articleInModalTitle}
+                  articleInModalHTMLContent={articleInModalHTMLContent}
+                  modalOnOk={modalOnOk}
+                  modalOnCancel={modalOnCancel}
+                  loadingArticleId={loadingArticleId}
+                  onArticleTitleClick={onArticleTitleClick}
+                  onIsVisibleSwitchClick={onIsVisibleSwitchClick}
+                  onModifyArticleButtonClick={onModifyArticleButtonClick}
+                  onDeleteArticleButtonClick={onDeleteArticleButtonClick}
+                  onDeleteArticleConfirm={onDeleteArticleConfirm} />);
 }
 
-export default withRouter(ArticleList);
+export default React.memo(ArticleList);
