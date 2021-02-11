@@ -1,36 +1,25 @@
-import React, {PureComponent} from 'react';
+import React, {useEffect, useState} from 'react';
 import View from './View';
 import {hljs} from '../../Singleton';
 import '../../ModuleConfig/MathJax';
 
-interface Props
+interface IProps
 {
     HTMLContent: string,
 }
 
-interface State
+function ArticleShower(props: IProps)
 {
-    wrapper: any,
-    loading: boolean,
-}
+    const [wrapper, setWrapper] = useState(document.createElement('div'));
+    const [loading, setLoading] = useState(false);
+    const {HTMLContent} = props;
 
-class ArticleShower extends PureComponent<Props, State>
-{
-    constructor(props: Props)
+    useEffect(() =>
     {
-        super(props);
-        this.state = {
-            wrapper: React.createElement('div'),
-            loading: true,
-        };
-    }
-
-
-    componentDidMount()
-    {
-        const {HTMLContent} = this.props;
         const wrapper = document.createElement('div');
         wrapper.innerHTML = HTMLContent;
+
+        setLoading(true);
         wrapper.querySelectorAll('pre code').forEach((block) =>
         {
             hljs.highlightBlock(block);
@@ -38,17 +27,14 @@ class ArticleShower extends PureComponent<Props, State>
 
         MathJax.Hub.Queue(['Typeset', MathJax.Hub, wrapper, () =>
         {
-            this.setState({wrapper, loading: false});
+            setWrapper(wrapper);
+            setLoading(false);
         }]);
-    }
+    }, [HTMLContent]);
 
-    render()
-    {
-        const {wrapper, loading} = this.state;
-        return (
-            <View HTMLContent={wrapper.innerHTML} loading={loading} />
-        );
-    }
+    return (
+        <View HTMLContent={wrapper.innerHTML} loading={loading} />
+    );
 }
 
-export default ArticleShower;
+export default React.memo(ArticleShower);
