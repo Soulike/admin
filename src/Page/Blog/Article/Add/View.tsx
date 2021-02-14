@@ -6,6 +6,7 @@ import {Category} from '../../../../Class';
 import {CheckboxProps} from 'antd/lib/checkbox';
 import ArticleEditor from '../../../../Component/ArticleEditor';
 import Style from './Style.module.scss';
+import {ButtonProps} from 'antd';
 
 interface Props
 {
@@ -23,6 +24,8 @@ interface Props
     isSubmittingArticle: boolean,
     onArticlePreviewButtonClick: NativeButtonProps['onClick'],
     isArticlePreviewModalVisible: boolean,
+    onArticlePreviewModalOk: ButtonProps['onClick'],
+    onArticlePreviewModalCancel: ButtonProps['onClick'],
     HTMLContent: string,
 }
 

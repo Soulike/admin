@@ -1,109 +1,90 @@
-import React, {PureComponent} from 'react';
+import React, {useEffect, useState} from 'react';
 import View from './View';
 import {Category} from '../../../../Class';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {Blog} from '../../../../Api';
-import {message, notification} from 'antd';
+import {ButtonProps, message, notification} from 'antd';
 import {CheckboxProps} from 'antd/lib/checkbox';
-import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {markdownConverter} from '../../../../Singleton';
 
-interface Props extends RouteComponentProps {}
-
-interface State
+function Add()
 {
-    title: string,
-    content: string,
-    category: number | undefined,
-    isVisible: boolean,
-    categoryOption: Array<Category>,
-    isLoadingCategory: boolean,
-    isSubmittingArticle: boolean,
-    isArticlePreviewModalVisible: boolean,
-    HTMLContent: string,
-}
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [category, setCategory] = useState<number | undefined>(undefined);
+    const [isVisible, setIsVisible] = useState(true);
+    const [categoryOption, setCategoryOption] = useState<Category[]>([]);
+    const [isLoadingCategory, setIsLoadingCategory] = useState(false);
+    const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
+    const [isArticlePreviewModalVisible, setIsArticlePreviewModalVisible] = useState(false);
+    const [HTMLContent, setHTMLContent] = useState('');
 
-class Add extends PureComponent<Props, State>
-{
-    constructor(props: Props)
+    useEffect(() =>
     {
-        super(props);
-        this.state = {
-            title: '',
-            content: '',
-            category: undefined,
-            isVisible: true,
-            categoryOption: [],
-            isLoadingCategory: false,
-            isSubmittingArticle: false,
-            isArticlePreviewModalVisible: false,
-            HTMLContent: '',
-        };
-    }
-
-    setStatePromise(state: any): Promise<void>
-    {
-        return new Promise<void>(resolve =>
+        const getCategoryOption = async () =>
         {
-            this.setState(state, () =>
+            const category = await Blog.Category.getAll();
+            if (category !== null)
             {
-                resolve();
-            });
-        });
-    }
+                setCategoryOption(category);
+            }
+        };
 
-    async componentDidMount()
+        setIsLoadingCategory(true);
+        getCategoryOption()
+            .finally(() => setIsLoadingCategory(false));
+    }, []);
+
+    const onTitleInputChange: InputProps['onChange'] = e =>
     {
-        await this.getCategoryOption();
-    }
+        setTitle(e.target.value);
+    };
 
-    onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
+    const onContentTextAreaChange: TextAreaProps['onChange'] = e =>
+    {
+        setContent(e.target.value);
+    };
+
+    const onCategorySelectorChange: SelectProps<number>['onChange'] = value =>
+    {
+        setCategory(value); // 在 View 中设置的是 number
+    };
+
+    const onIsVisibleCheckboxChange: CheckboxProps['onChange'] = e =>
+    {
+        setIsVisible(e.target.checked);
+    };
+
+    const onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
     {
         e.preventDefault();
-        const {isArticlePreviewModalVisible, content} = this.state;
-        this.setState({
-            isArticlePreviewModalVisible: !isArticlePreviewModalVisible,
-            HTMLContent: markdownConverter.makeHtml(content),
-        });
+        setHTMLContent(markdownConverter.makeHtml(content));
+        setIsArticlePreviewModalVisible(true);
     };
 
-    getCategoryOption = async () =>
-    {
-        await this.setStatePromise({isLoadingCategory: true});
-        const category = await Blog.Category.getAll();
-        if (category !== null)
-        {
-            this.setState({categoryOption: category});
-            await this.setStatePromise({isLoadingCategory: false});
-        }
-    };
-
-    onTitleInputChange: InputProps['onChange'] = e =>
-    {
-        this.setState({title: e.target.value});
-    };
-
-    onContentTextAreaChange: TextAreaProps['onChange'] = e =>
-    {
-        this.setState({content: e.target.value});
-    };
-
-    onCategorySelectorChange: SelectProps<number>['onChange'] = value =>
-    {
-        this.setState({category: value}); // 在 View 中设置的是 number
-    };
-
-    onIsVisibleCheckboxChange: CheckboxProps['onChange'] = e =>
-    {
-        this.setState({isVisible: e.target.checked});
-    };
-
-    onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
+    const onArticlePreviewModalOk: ButtonProps['onClick'] = e =>
     {
         e.preventDefault();
-        const {title, content, category, isVisible} = this.state;
+        setIsArticlePreviewModalVisible(false);
+    };
+
+    const onArticlePreviewModalCancel: ButtonProps['onClick'] = onArticlePreviewModalOk;
+
+    const initAfterSubmit = () =>
+    {
+        setTitle('');
+        setContent('');
+        setCategory(undefined);
+        setIsVisible(true);
+        setIsLoadingCategory(false);
+        setIsSubmittingArticle(false);
+    };
+
+    const onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
+    {
+        e.preventDefault();
         if (typeof category === 'undefined')
         {
             message.warning('请选择文章分类');
@@ -118,45 +99,34 @@ class Add extends PureComponent<Props, State>
         }
         else
         {
-            await this.setStatePromise({isSubmittingArticle: true});
+            setIsSubmittingArticle(true);
             const result = await Blog.Article.add({title, category, content, isVisible});
-            await this.setStatePromise({isSubmittingArticle: false});
+            setIsSubmittingArticle(false);
             if (result !== null)
             {
                 notification.success({message: '文章提交成功'});
-                await this.setStatePromise(
-                    {
-                        title: '',
-                        content: '',
-                        category: undefined,
-                        isVisible: true,
-                        isLoadingCategory: false,
-                        isSubmittingArticle: false,
-                    },
-                );
+                initAfterSubmit();
             }
         }
     };
 
-    render()
-    {
-        const {title, content, category, isVisible, categoryOption, isLoadingCategory, isSubmittingArticle, isArticlePreviewModalVisible, HTMLContent} = this.state;
-        return (<View title={title}
-                      content={content}
-                      category={category}
-                      isVisible={isVisible}
-                      categoryOption={categoryOption}
-                      onTitleInputChange={this.onTitleInputChange}
-                      onContentTextAreaChange={this.onContentTextAreaChange}
-                      onCategorySelectorChange={this.onCategorySelectorChange}
-                      onIsVisibleCheckboxChange={this.onIsVisibleCheckboxChange}
-                      onSubmitButtonClick={this.onSubmitButtonClick}
-                      isLoadingCategory={isLoadingCategory}
-                      isSubmittingArticle={isSubmittingArticle}
-                      isArticlePreviewModalVisible={isArticlePreviewModalVisible}
-                      onArticlePreviewButtonClick={this.onArticlePreviewButtonClick}
-                      HTMLContent={HTMLContent} />);
-    }
+    return (<View title={title}
+                  content={content}
+                  category={category}
+                  isVisible={isVisible}
+                  categoryOption={categoryOption}
+                  onTitleInputChange={onTitleInputChange}
+                  onContentTextAreaChange={onContentTextAreaChange}
+                  onCategorySelectorChange={onCategorySelectorChange}
+                  onIsVisibleCheckboxChange={onIsVisibleCheckboxChange}
+                  onSubmitButtonClick={onSubmitButtonClick}
+                  isLoadingCategory={isLoadingCategory}
+                  isSubmittingArticle={isSubmittingArticle}
+                  isArticlePreviewModalVisible={isArticlePreviewModalVisible}
+                  onArticlePreviewButtonClick={onArticlePreviewButtonClick}
+                  onArticlePreviewModalOk={onArticlePreviewModalOk}
+                  onArticlePreviewModalCancel={onArticlePreviewModalCancel}
+                  HTMLContent={HTMLContent} />);
 }
 
-export default withRouter(Add);
+export default React.memo(Add);

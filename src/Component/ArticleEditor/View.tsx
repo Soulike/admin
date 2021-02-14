@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Button, Checkbox, Input, Select} from 'antd';
+import {Button, ButtonProps, Checkbox, Input, Select} from 'antd';
 import {SelectProps} from 'antd/lib/select';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
@@ -28,6 +28,8 @@ interface Props
     isSubmittingArticle: boolean,
     onArticlePreviewButtonClick: NativeButtonProps['onClick'],
     isArticlePreviewModalVisible: boolean,
+    onArticlePreviewModalOk: ButtonProps['onClick'],
+    onArticlePreviewModalCancel: ButtonProps['onClick'],
     HTMLContent: string,
 }
 
@@ -49,6 +51,8 @@ function ArticleEditorView(props: Props)
         isLoadingArticle,
         onArticlePreviewButtonClick,
         isArticlePreviewModalVisible,
+        onArticlePreviewModalOk,
+        onArticlePreviewModalCancel,
         HTMLContent,
     } = props;
     return (
@@ -93,8 +97,8 @@ function ArticleEditorView(props: Props)
             <ArticlePreviewModal title={title}
                                  HTMLContent={HTMLContent}
                                  visible={isArticlePreviewModalVisible}
-                                 onOk={onArticlePreviewButtonClick}
-                                 onCancel={onArticlePreviewButtonClick} />
+                                 onOk={onArticlePreviewModalOk}
+                                 onCancel={onArticlePreviewModalCancel} />
         </div>
     );
 }
