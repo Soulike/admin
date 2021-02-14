@@ -1,76 +1,50 @@
-import React, {PureComponent} from 'react';
+import React, {useState} from 'react';
 import View from './View';
 import {InputProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {message, notification} from 'antd';
 import {Blog} from '../../../../Api';
 
-interface Props {}
-
-interface State
+function Add()
 {
-    categoryName: string,
-    isSubmitting: boolean,
-}
+    const [categoryName, setCategoryName] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-class Add extends PureComponent<Props, State>
-{
-    constructor(props: Props)
+    const onCategoryNameInputChange: InputProps['onChange'] = e =>
     {
-        super(props);
-        this.state = {
-            categoryName: '',
-            isSubmitting: false,
-        };
-    }
-
-    setStatePromise(state: any): Promise<void>
-    {
-        return new Promise<void>(resolve =>
-        {
-            this.setState(state, () =>
-            {
-                resolve();
-            });
-        });
-    }
-
-    onCategoryNameInputChange: InputProps['onChange'] = e =>
-    {
-        this.setState({categoryName: e.target.value});
+        setCategoryName(e.target.value);
     };
 
-    onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
+    const initAfterSubmit = () =>
+    {
+        setCategoryName('');
+        setIsSubmitting(false);
+    };
+
+    const onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
     {
         e.preventDefault();
-        const {categoryName} = this.state;
         if (categoryName.length === 0)
         {
             message.warning('分类名不能为空');
         }
         else
         {
-            await this.setStatePromise({isSubmitting: true});
+            setIsSubmitting(true);
             const result = await Blog.Category.add({name: categoryName});
-            await this.setStatePromise({isSubmitting: false});
+            setIsSubmitting(false);
             if (result !== null)
             {
                 notification.success({message: '分类添加成功'});
-                this.setState({
-                    categoryName: '',
-                    isSubmitting: false,
-                });
+                initAfterSubmit();
             }
         }
     };
 
-    render()
-    {
-        const {categoryName, isSubmitting} = this.state;
-        return (<View categoryName={categoryName}
-                      onCategoryNameInputChange={this.onCategoryNameInputChange}
-                      onSubmitButtonClick={this.onSubmitButtonClick} isSubmitting={isSubmitting} />);
-    }
+    return (<View categoryName={categoryName}
+                  onCategoryNameInputChange={onCategoryNameInputChange}
+                  onSubmitButtonClick={onSubmitButtonClick}
+                  isSubmitting={isSubmitting} />);
 }
 
-export default Add;
+export default React.memo(Add);
