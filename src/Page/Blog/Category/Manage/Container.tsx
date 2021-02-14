@@ -86,7 +86,7 @@ function Manage()
                 setCategoryMap(categoryMap =>
                 {
                     categoryMap.get(idOfCategoryToModify)!.name = nameOfCategoryToModify;
-                    return categoryMap;
+                    return new Map(categoryMap);
                 });
                 setIsModifyModalVisible(false);
             }
@@ -141,12 +141,12 @@ function Manage()
                 setCategoryMap(categoryMap =>
                 {
                     categoryMap.delete(idOfCategoryToDelete);
-                    return categoryMap;
+                    return new Map(categoryMap);
                 });
                 setCategoryToArticleNumberMap(categoryToArticleNumberMap =>
                 {
                     categoryToArticleNumberMap.delete(idOfCategoryToDelete);
-                    return categoryToArticleNumberMap;
+                    return new Map(categoryToArticleNumberMap);
                 });
             }
         }
