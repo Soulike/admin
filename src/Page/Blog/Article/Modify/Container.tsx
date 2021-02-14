@@ -1,69 +1,37 @@
-import React, {PureComponent} from 'react';
+import React, {useEffect, useState} from 'react';
 import View from './View';
-import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {Category} from '../../../../Class';
 import querystring from 'querystring';
-import {message, notification} from 'antd';
+import {ButtonProps, message, notification} from 'antd';
 import {Blog} from '../../../../Api';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {markdownConverter} from '../../../../Singleton';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {CheckboxProps} from 'antd/lib/checkbox';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG';
 
-interface Props extends RouteComponentProps {}
-
-interface State
+function Modify()
 {
-    id: number,
-    title: string,
-    content: string,
-    category: number | undefined,
-    isVisible: boolean,
-    categoryOption: Array<Category>,
-    isLoadingCategory: boolean,
-    isLoadingArticle: boolean,
-    isSubmittingArticle: boolean,
-    isArticlePreviewModalVisible: boolean,
-    HTMLContent: string,
-}
+    const [id, setId] = useState(0);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [category, setCategory] = useState<number | undefined>(undefined);
+    const [isVisible, setIsVisible] = useState(true);
+    const [categoryOption, setCategoryOption] = useState<Category[]>([]);
+    const [isLoadingCategory, setIsLoadingCategory] = useState(false);
+    const [isLoadingArticle, setIsLoadingArticle] = useState(false);
+    const [isSubmittingArticle, setIsSubmittingArticle] = useState(false);
+    const [isArticlePreviewModalVisible, setIsArticlePreviewModalVisible] = useState(false);
+    const [HTMLContent, setHTMLContent] = useState('');
 
-class Modify extends PureComponent<Props, State>
-{
-    constructor(props: Props)
-    {
-        super(props);
-        this.state = {
-            id: 0,
-            title: '',
-            content: '',
-            category: undefined,
-            isVisible: true,
-            categoryOption: [],
-            isLoadingCategory: false,
-            isSubmittingArticle: false,
-            isLoadingArticle: true,
-            isArticlePreviewModalVisible: false,
-            HTMLContent: '',
-        };
-    }
+    const {search} = useLocation();
+    const history = useHistory();
 
-    setStatePromise(state: any): Promise<void>
-    {
-        return new Promise<void>(resolve =>
-        {
-            this.setState(state, () =>
-            {
-                resolve();
-            });
-        });
-    }
-
-    componentDidMount()
+    useEffect(() =>
     {
         // 查询字符串格式为 ?id=xxx
-        const {location: {search}} = this.props;
         const {id: idString} = querystring.parse(search.slice(1));
         if (typeof idString !== 'string')
         {
@@ -78,69 +46,78 @@ class Modify extends PureComponent<Props, State>
             }
             else
             {
-                // 获取所有种类及文章内容
-                this.setStatePromise({id, isLoadingCategory: true})
-                    .then(() =>
+                // 获取文章内容
+                setId(id);
+                setIsLoadingArticle(true);
+                Blog.Article.getById(id)
+                    .then(article =>
                     {
-                        return Promise.all([
-                            Blog.Category.getAll(),
-                            Blog.Article.getById(id),
-                        ]);
-                    })
-                    .then(([categoryList, article]) =>
-                    {
-                        if (categoryList !== null && article !== null)
+                        if (article !== null)
                         {
                             const {title, content, category, isVisible} = article;
-                            return this.setStatePromise({
-                                title: title!,
-                                content: content!,
-                                category: category!,
-                                isVisible: isVisible!,
-                                categoryOption: categoryList,
-                                isLoadingArticle: false,
-                                isLoadingCategory: false,
-                            });
+                            setTitle(title);
+                            setContent(content);
+                            setCategory(category);
+                            setIsVisible(isVisible);
                         }
-                    });
+                    })
+                    .finally(() => setIsLoadingArticle(false));
             }
         }
-    }
+    }, [search]);
 
-    onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
+    useEffect(() =>
+    {
+        setIsLoadingCategory(true);
+        Blog.Category.getAll()
+            .then(categoryList =>
+            {
+                if (categoryList !== null)
+                {
+                    setCategoryOption(categoryList);
+                }
+            })
+            .finally(() => setIsLoadingCategory(false));
+    }, []);
+
+    const onTitleInputChange: InputProps['onChange'] = e =>
+    {
+        setTitle(e.target.value);
+    };
+
+    const onContentTextAreaChange: TextAreaProps['onChange'] = e =>
+    {
+        setContent(e.target.value);
+    };
+
+    const onCategorySelectorChange: SelectProps<number>['onChange'] = value =>
+    {
+        setCategory(value); // 在 View 中设置的是 number
+    };
+
+    const onIsVisibleCheckboxChange: CheckboxProps['onChange'] = e =>
+    {
+        setIsVisible(e.target.checked);
+    };
+
+    const onArticlePreviewButtonClick: NativeButtonProps['onClick'] = e =>
     {
         e.preventDefault();
-        const {isArticlePreviewModalVisible, content} = this.state;
-        this.setState({
-            isArticlePreviewModalVisible: !isArticlePreviewModalVisible,
-            HTMLContent: markdownConverter.makeHtml(content),
-        });
+        setHTMLContent(markdownConverter.makeHtml(content));
+        setIsArticlePreviewModalVisible(true);
     };
 
-    onTitleInputChange: InputProps['onChange'] = e =>
-    {
-        this.setState({title: e.target.value});
-    };
-
-    onContentTextAreaChange: TextAreaProps['onChange'] = e =>
-    {
-        this.setState({content: e.target.value});
-    };
-
-    onCategorySelectorChange: SelectProps<number>['onChange'] = value =>
-    {
-        this.setState({category: value}); // 在 View 中设置的是 number
-    };
-
-    onIsVisibleCheckboxChange: CheckboxProps['onChange'] = e =>
-    {
-        this.setState({isVisible: e.target.checked});
-    };
-
-    onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
+    const onArticlePreviewModalOk: ButtonProps['onClick'] = e =>
     {
         e.preventDefault();
-        const {id, title, content, category, isVisible} = this.state;
+        setIsArticlePreviewModalVisible(false);
+    };
+
+    const onArticlePreviewModalCancel: ButtonProps['onClick'] = onArticlePreviewModalOk;
+
+    const onSubmitButtonClick: NativeButtonProps['onClick'] = async e =>
+    {
+        e.preventDefault();
         if (typeof category === 'undefined')
         {
             message.warning('请选择文章分类');
@@ -155,30 +132,36 @@ class Modify extends PureComponent<Props, State>
         }
         else
         {
-            await this.setStatePromise({isSubmittingArticle: true});
+            setIsSubmittingArticle(true);
             const result = await Blog.Article.modify({id, title, content, category, isVisible});
-            await this.setStatePromise({isSubmittingArticle: false});
+            setIsSubmittingArticle(false);
             if (result !== null)
             {
                 notification.success({message: '文章修改成功'});
-                const {history} = this.props;
                 history.replace(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]);
             }
         }
     };
 
-
-    render()
-    {
-        return (
-            <View {...this.state} onArticlePreviewButtonClick={this.onArticlePreviewButtonClick}
-                  onSubmitButtonClick={this.onSubmitButtonClick}
-                  onIsVisibleCheckboxChange={this.onIsVisibleCheckboxChange}
-                  onCategorySelectorChange={this.onCategorySelectorChange}
-                  onContentTextAreaChange={this.onContentTextAreaChange}
-                  onTitleInputChange={this.onTitleInputChange} />
-        );
-    }
+    return (
+        <View title={title}
+              content={content}
+              category={category}
+              categoryOption={categoryOption}
+              isLoadingCategory={isLoadingCategory}
+              isLoadingArticle={isLoadingArticle}
+              isSubmittingArticle={isSubmittingArticle}
+              HTMLContent={HTMLContent}
+              isVisible={isVisible}
+              onArticlePreviewButtonClick={onArticlePreviewButtonClick}
+              onArticlePreviewModalOk={onArticlePreviewModalOk}
+              onArticlePreviewModalCancel={onArticlePreviewModalCancel}
+              isArticlePreviewModalVisible={isArticlePreviewModalVisible}
+              onSubmitButtonClick={onSubmitButtonClick}
+              onIsVisibleCheckboxChange={onIsVisibleCheckboxChange}
+              onCategorySelectorChange={onCategorySelectorChange}
+              onContentTextAreaChange={onContentTextAreaChange}
+              onTitleInputChange={onTitleInputChange} />);
 }
 
-export default withRouter(Modify);
+export default React.memo(Modify);
