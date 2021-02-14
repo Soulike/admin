@@ -11,6 +11,7 @@ import {PopconfirmProps} from 'antd/lib/popconfirm';
 
 function Manage()
 {
+    const [loading, setLoading] = useState(false);
     const [categoryMap, setCategoryMap] = useState<Map<number, Category>>(new Map());
     const [categoryToArticleNumberMap, setCategoryToArticleNumberMap] = useState<Map<number, number>>(new Map());
 
@@ -25,6 +26,7 @@ function Manage()
 
     useEffect(() =>
     {
+        setLoading(true);
         Blog.Category.getAll()
             .then(categoryList =>
             {
@@ -37,11 +39,13 @@ function Manage()
                     });
                     setCategoryMap(categoryMap);
                 }
-            });
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     useEffect(() =>
     {
+        setLoading(true);
         Blog.Category.getAllArticleAmountById()
             .then(articleAmountOfCategory =>
             {
@@ -55,7 +59,8 @@ function Manage()
                     });
                     setCategoryToArticleNumberMap(categoryToArticleNumberMap);
                 }
-            });
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     const onArticleAmountTagClick: (id: number) => TagProps['onClick'] = (id: number) =>
@@ -79,7 +84,9 @@ function Manage()
         e.preventDefault();
         if (nameOfCategoryToModify !== '')
         {
+            setLoading(true);
             const result = await Blog.Category.modify(new Category(idOfCategoryToModify, nameOfCategoryToModify));
+            setLoading(false);
             if (result !== null)
             {
                 notification.success({message: '文章分类编辑成功'});
@@ -131,7 +138,9 @@ function Manage()
         }
         else
         {
+            setLoading(true);
             const result = await Blog.Category.deleteById(idOfCategoryToDelete);
+            setLoading(false);
             if (result !== null)
             {
                 notification.success({
@@ -153,7 +162,8 @@ function Manage()
     };
 
 
-    return (<View categoryMap={categoryMap}
+    return (<View loading={loading}
+                  categoryMap={categoryMap}
                   categoryToArticleNumberMap={categoryToArticleNumberMap}
 
                   isArticleListModalVisible={isArticleListModalVisible}

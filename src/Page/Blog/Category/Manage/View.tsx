@@ -17,6 +17,8 @@ const {Group} = Button;
 
 interface Props
 {
+    loading: boolean,
+
     categoryMap: Map<number, Category>,
     categoryToArticleNumberMap: Map<number, number>,
 
@@ -40,6 +42,7 @@ interface Props
 function ManageView(props: Props)
 {
     const {
+        loading,
         categoryMap,
         categoryToArticleNumberMap,
         categoryIdOfArticleListModal,
@@ -60,7 +63,7 @@ function ManageView(props: Props)
     const categoryInModal = categoryMap.get(categoryIdOfArticleListModal);
     return (
         <div className={Style.Manage}>
-            <List dataSource={Array.from(categoryMap.values())} bordered={true} pagination={
+            <List loading={loading} dataSource={Array.from(categoryMap.values())} bordered={true} pagination={
                 {
                     position: 'bottom',
                     pageSizeOptions: ['5', '10', '15', '20'],
