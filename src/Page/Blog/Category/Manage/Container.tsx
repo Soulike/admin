@@ -1,112 +1,94 @@
-import React, {PureComponent} from 'react';
+import React, {useEffect, useState} from 'react';
 import View from './View';
 import {Category} from '../../../../Class';
+import {Blog} from '../../../../Api';
 import {TagProps} from 'antd/lib/tag';
 import {ModalProps} from 'antd/lib/modal';
-import {Blog} from '../../../../Api';
-import {NativeButtonProps} from 'antd/lib/button/button';
-import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {message, notification} from 'antd';
+import {NativeButtonProps} from 'antd/lib/button/button';
 import {InputProps} from 'antd/lib/input';
+import {PopconfirmProps} from 'antd/lib/popconfirm';
 
-interface Props {}
-
-interface State
+function Manage()
 {
-    categoryMap: Map<number, Category>,
-    categoryToArticleNumberMap: Map<number, number>,
+    const [categoryMap, setCategoryMap] = useState<Map<number, Category>>(new Map());
+    const [categoryToArticleNumberMap, setCategoryToArticleNumberMap] = useState<Map<number, number>>(new Map());
 
-    isArticleListModalVisible: boolean,
-    categoryIdOfArticleListModal: number,
+    const [isArticleListModalVisible, setIsArticleListModalVisible] = useState(false);
+    const [categoryIdOfArticleListModal, setCategoryIdOfArticleListModal] = useState(0);
 
-    isModifyModalVisible: boolean,
-    idOfCategoryToModify: number,
-    nameOfCategoryToModify: string,
+    const [isModifyModalVisible, setIsModifyModalVisible] = useState(false);
+    const [idOfCategoryToModify, setIdOfCategoryToModify] = useState(0);
+    const [nameOfCategoryToModify, setNameOfCategoryToModify] = useState('');
 
-    idOfCategoryToDelete: number,
-}
+    const [idOfCategoryToDelete, setIdOfCategoryToDelete] = useState(0);
 
-class Manage extends PureComponent<Props, State>
-{
-    constructor(props: Props)
+    useEffect(() =>
     {
-        super(props);
-        this.state = {
-            categoryMap: new Map<number, Category>(),
-            categoryToArticleNumberMap: new Map<number, number>(),
-            isArticleListModalVisible: false,
-            categoryIdOfArticleListModal: 0,
-
-            isModifyModalVisible: false,
-
-            idOfCategoryToDelete: 0,
-            idOfCategoryToModify: 0,
-            nameOfCategoryToModify: '',
-        };
-    }
-
-    componentDidMount()
-    {
-        Promise.all([
-            Blog.Category.getAll(),
-            Blog.Category.getAllArticleAmountById(),
-        ])
-            .then(([categoryList, articleAmountOfCategory]) =>
+        Blog.Category.getAll()
+            .then(categoryList =>
             {
-                if (categoryList !== null && articleAmountOfCategory !== null)
+                if (categoryList !== null)
                 {
-                    const categoryMap: Map<number, Category> = new Map<number, Category>();
-                    const categoryToArticleNumberMap = new Map<number, number>();
+                    const categoryMap: Map<number, Category> = new Map();
                     categoryList.forEach(category =>
                     {
                         categoryMap.set(category.id!, category);
                     });
+                    setCategoryMap(categoryMap);
+                }
+            });
+    }, []);
+
+    useEffect(() =>
+    {
+        Blog.Category.getAllArticleAmountById()
+            .then(articleAmountOfCategory =>
+            {
+                if (articleAmountOfCategory !== null)
+                {
+                    const categoryToArticleNumberMap = new Map<number, number>();
                     Object.keys(articleAmountOfCategory).forEach(idString =>
                     {
                         const id = Number.parseInt(idString);
                         categoryToArticleNumberMap.set(id, articleAmountOfCategory[id]);
                     });
-                    this.setState({
-                        categoryMap,
-                        categoryToArticleNumberMap,
-                    });
+                    setCategoryToArticleNumberMap(categoryToArticleNumberMap);
                 }
             });
-    }
+    }, []);
 
-    onArticleAmountTagClick: (id: number) => TagProps['onClick'] = (id: number) =>
+    const onArticleAmountTagClick: (id: number) => TagProps['onClick'] = (id: number) =>
     {
         return e =>
         {
             e.preventDefault();
-            this.setState({
-                categoryIdOfArticleListModal: id,
-                isArticleListModalVisible: true,
-            });
+            setCategoryIdOfArticleListModal(id);
+            setIsArticleListModalVisible(true);
         };
     };
 
-    onArticleListModalOk: ModalProps['onOk'] = e =>
+    const onArticleListModalOk: ModalProps['onOk'] = e =>
     {
         e.preventDefault();
-        this.setState({
-            isArticleListModalVisible: false,
-        });
+        setIsArticleListModalVisible(false);
     };
 
-    onModifyModalOk: ModalProps['onOk'] = async e =>
+    const onModifyModalOk: ModalProps['onOk'] = async e =>
     {
         e.preventDefault();
-        const {idOfCategoryToModify, nameOfCategoryToModify, categoryMap} = this.state;
-        if (nameOfCategoryToModify !== null)
+        if (nameOfCategoryToModify !== '')
         {
             const result = await Blog.Category.modify(new Category(idOfCategoryToModify, nameOfCategoryToModify));
             if (result !== null)
             {
                 notification.success({message: '文章分类编辑成功'});
-                categoryMap.get(idOfCategoryToModify)!.name = nameOfCategoryToModify;
-                this.forceUpdate();
-                this.setState({isModifyModalVisible: false});
+                setCategoryMap(categoryMap =>
+                {
+                    categoryMap.get(idOfCategoryToModify)!.name = nameOfCategoryToModify;
+                    return categoryMap;
+                });
+                setIsModifyModalVisible(false);
             }
         }
         else
@@ -115,41 +97,34 @@ class Manage extends PureComponent<Props, State>
         }
     };
 
-    onModifyModalCancel: ModalProps['onCancel'] = e =>
+    const onModifyModalCancel: ModalProps['onCancel'] = e =>
     {
         e.preventDefault();
-        this.setState({isModifyModalVisible: false});
+        setIsModifyModalVisible(false);
     };
 
-    onModifyButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
-    {
-        return () => this.setState(() =>
-        {
-            const {categoryMap} = this.state;
-            return {
-                idOfCategoryToModify: id,
-                nameOfCategoryToModify: categoryMap.get(id)!.name!,
-                isModifyModalVisible: true,
-            };
-        });
-    };
-
-    onCategoryNameInputChange: InputProps['onChange'] = e =>
-    {
-        this.setState({nameOfCategoryToModify: e.target.value});
-    };
-
-    onDeleteCategoryButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
+    const onModifyButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
     {
         return () =>
         {
-            this.setState({idOfCategoryToDelete: id});
+            setIdOfCategoryToModify(id);
+            setNameOfCategoryToModify(categoryMap.get(id)!.name!);
+            setIsModifyModalVisible(true);
         };
     };
 
-    onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = async () =>
+    const onCategoryNameInputChange: InputProps['onChange'] = e =>
     {
-        const {idOfCategoryToDelete, categoryMap, categoryToArticleNumberMap} = this.state;
+        setNameOfCategoryToModify(e.target.value);
+    };
+
+    const onDeleteCategoryButtonClick: (id: number) => NativeButtonProps['onClick'] = id =>
+    {
+        return () => setIdOfCategoryToDelete(id);
+    };
+
+    const onDeleteCategoryConfirm: PopconfirmProps['onConfirm'] = async () =>
+    {
         if (categoryToArticleNumberMap.get(idOfCategoryToDelete)! !== 0)
         {
             message.warning('不能删除有文章的分类');
@@ -163,35 +138,39 @@ class Manage extends PureComponent<Props, State>
                     message: '删除文章分类成功',
                 });
 
-                categoryMap.delete(idOfCategoryToDelete);
-                categoryToArticleNumberMap.delete(idOfCategoryToDelete);
-                this.forceUpdate();
+                setCategoryMap(categoryMap =>
+                {
+                    categoryMap.delete(idOfCategoryToDelete);
+                    return categoryMap;
+                });
+                setCategoryToArticleNumberMap(categoryToArticleNumberMap =>
+                {
+                    categoryToArticleNumberMap.delete(idOfCategoryToDelete);
+                    return categoryToArticleNumberMap;
+                });
             }
         }
     };
 
-    render()
-    {
-        const {categoryMap, categoryToArticleNumberMap, isArticleListModalVisible, categoryIdOfArticleListModal, isModifyModalVisible, nameOfCategoryToModify} = this.state;
-        return (<View categoryMap={categoryMap}
-                      categoryToArticleNumberMap={categoryToArticleNumberMap}
 
-                      isArticleListModalVisible={isArticleListModalVisible}
-                      categoryIdOfArticleListModal={categoryIdOfArticleListModal}
-                      onArticleAmountTagClick={this.onArticleAmountTagClick}
-                      onArticleListModalOk={this.onArticleListModalOk}
-                      onArticleListModalCancel={this.onArticleListModalOk}
+    return (<View categoryMap={categoryMap}
+                  categoryToArticleNumberMap={categoryToArticleNumberMap}
 
-                      onDeleteCategoryButtonClick={this.onDeleteCategoryButtonClick}
-                      onDeleteCategoryConfirm={this.onDeleteCategoryConfirm}
+                  isArticleListModalVisible={isArticleListModalVisible}
+                  categoryIdOfArticleListModal={categoryIdOfArticleListModal}
+                  onArticleAmountTagClick={onArticleAmountTagClick}
+                  onArticleListModalOk={onArticleListModalOk}
+                  onArticleListModalCancel={onArticleListModalOk}
 
-                      isModifyModalVisible={isModifyModalVisible}
-                      onModifyModalOk={this.onModifyModalOk}
-                      onModifyModalCancel={this.onModifyModalCancel}
-                      onModifyButtonClick={this.onModifyButtonClick}
-                      onCategoryNameInputChange={this.onCategoryNameInputChange}
-                      nameOfCategoryToModify={nameOfCategoryToModify} />);
-    }
+                  onDeleteCategoryButtonClick={onDeleteCategoryButtonClick}
+                  onDeleteCategoryConfirm={onDeleteCategoryConfirm}
+
+                  isModifyModalVisible={isModifyModalVisible}
+                  onModifyModalOk={onModifyModalOk}
+                  onModifyModalCancel={onModifyModalCancel}
+                  onModifyButtonClick={onModifyButtonClick}
+                  onCategoryNameInputChange={onCategoryNameInputChange}
+                  nameOfCategoryToModify={nameOfCategoryToModify} />);
 }
 
-export default Manage;
+export default React.memo(Manage);
