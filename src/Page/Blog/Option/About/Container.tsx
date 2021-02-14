@@ -1,62 +1,49 @@
-import React, {PureComponent} from 'react';
+import React, {useEffect, useState} from 'react';
 import View from './View';
+import {Blog} from '../../../../Api';
 import {TextAreaProps} from 'antd/lib/input';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {ModalProps} from 'antd/lib/modal';
 import {message, notification} from 'antd';
-import {Blog} from '../../../../Api';
+import {ModalProps} from 'antd/lib/modal';
 
-interface Props {}
-
-interface State
+function About()
 {
-    about: string,
-    previewModalVisible: boolean,
-    loading: boolean,
-}
+    const [about, setAbout] = useState('');
+    const [previewModalVisible, setPreviewModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-class About extends PureComponent<Props, State>
-{
-    constructor(props: Props)
+    useEffect(() =>
     {
-        super(props);
-        this.state = {
-            about: '',
-            previewModalVisible: false,
-            loading: true,
-        };
-    }
-
-    async componentDidMount()
-    {
-        const result = await Blog.Option.get();
-        if (result !== null)
-        {
-            const {about} = result;
-            this.setState({
-                about,
-                loading: false,
+        setLoading(true);
+        Blog.Option.get()
+            .then(result =>
+            {
+                if (result !== null)
+                {
+                    const {about} = result;
+                    setAbout(about);
+                    setLoading(false);
+                }
             });
-        }
-    }
+    }, []);
 
-
-    onAboutTextareaChange: TextAreaProps['onChange'] = e =>
+    const onAboutTextareaChange: TextAreaProps['onChange'] = e =>
     {
-        this.setState({about: e.target.value});
+        setAbout(e.target.value);
     };
 
-    onPreviewButtonClick: NativeButtonProps['onClick'] = () =>
+    const onPreviewButtonClick: NativeButtonProps['onClick'] = () =>
     {
-        this.setState({previewModalVisible: true});
+        setPreviewModalVisible(true);
     };
 
-    onSubmitButtonClick: NativeButtonProps['onClick'] = async () =>
+    const onSubmitButtonClick: NativeButtonProps['onClick'] = async () =>
     {
-        const {about} = this.state;
         if (about.length !== 0)
         {
+            setLoading(true);
             const result = await Blog.Option.set(about);
+            setLoading(false);
             if (result !== null)
             {
                 notification.success({message: '修改关于成功'});
@@ -68,28 +55,20 @@ class About extends PureComponent<Props, State>
         }
     };
 
-    onPreviewModalOk: ModalProps['onOk'] = () =>
+    const onPreviewModalOk: ModalProps['onOk'] = () =>
     {
-        this.setState({previewModalVisible: false});
+        setPreviewModalVisible(false);
     };
 
-    onPreviewModalCancel: ModalProps['onCancel'] = () =>
-    {
-        this.setState({previewModalVisible: false});
-    };
+    const onPreviewModalCancel: ModalProps['onCancel'] = onPreviewModalOk;
 
-
-    render()
-    {
-        const {about, previewModalVisible, loading} = this.state;
-        return (<View onSubmitButtonClick={this.onSubmitButtonClick}
-                      about={about}
-                      previewModalVisible={previewModalVisible}
-                      onAboutTextareaChange={this.onAboutTextareaChange}
-                      onPreviewButtonClick={this.onPreviewButtonClick}
-                      onPreviewModalCancel={this.onPreviewModalCancel}
-                      onPreviewModalOk={this.onPreviewModalOk} loading={loading} />);
-    }
+    return (<View onSubmitButtonClick={onSubmitButtonClick}
+                  about={about}
+                  previewModalVisible={previewModalVisible}
+                  onAboutTextareaChange={onAboutTextareaChange}
+                  onPreviewButtonClick={onPreviewButtonClick}
+                  onPreviewModalCancel={onPreviewModalCancel}
+                  onPreviewModalOk={onPreviewModalOk} loading={loading} />);
 }
 
-export default About;
+export default React.memo(About);
