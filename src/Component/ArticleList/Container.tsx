@@ -21,7 +21,8 @@ function ArticleList(props: IProps)
 {
     const [articleMap, setArticleMap] = useState(new Map<number, Article>());
     const [categoryMap, setCategoryMap] = useState(new Map<number, Category>());
-    const [isLoading, setIsLoading] = useState(false);
+    const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+    const [isArticleLoading, setIsArticleLoading] = useState(false);
     const [loadingArticleId, setLoadingArticleId] = useState(0);
 
     const [articleInModalTitle, setArticleInModalTitle] = useState('');
@@ -36,7 +37,7 @@ function ArticleList(props: IProps)
 
     useEffect(() =>
     {
-        setIsLoading(true);
+        setIsCategoryLoading(true);
         Blog.Category.getAll()
             .then((categoryList) =>
             {
@@ -52,13 +53,13 @@ function ArticleList(props: IProps)
             })
             .finally(() =>
             {
-                setIsLoading(false);
+                setIsCategoryLoading(false);
             });
     }, []);
 
     useEffect(() =>
     {
-        setIsLoading(true);
+        setIsArticleLoading(true);
         Promise.resolve()
             .then(() =>
             {
@@ -86,7 +87,7 @@ function ArticleList(props: IProps)
             })
             .finally(() =>
             {
-                setIsLoading(false);
+                setIsArticleLoading(false);
             });
     }, [categoryIdFilter]);
 
@@ -169,7 +170,7 @@ function ArticleList(props: IProps)
         }
     };
 
-    return (<View isLoading={isLoading}
+    return (<View isLoading={isCategoryLoading || isArticleLoading}
                   articleMap={articleMap}
                   categoryMap={categoryMap}
                   modalIsVisible={modalIsVisible}
