@@ -1,0 +1,1 @@
+export {default as useMaxJax} from './useMaxJax';

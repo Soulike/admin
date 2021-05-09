@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import View from './View';
 import {hljs} from '../../Singleton';
-import '../../ModuleConfig/MathJax';
+import useMaxJax from '../../Hook/useMaxJax';
+import {MATH_JAX} from '../../CONFIG';
+import {setImmediatePromise} from '../../Function/Promisify';
 
 interface IProps
 {
@@ -20,17 +22,18 @@ function ArticleShower(props: IProps)
         wrapper.innerHTML = HTMLContent;
 
         setLoading(true);
-        wrapper.querySelectorAll('pre code').forEach((block) =>
+        wrapper.querySelectorAll('pre code').forEach(async (block) =>
         {
-            hljs.highlightBlock(block);
+            hljs.highlightElement(block);
+            await setImmediatePromise();
         });
 
-        MathJax.Hub.Queue(['Typeset', MathJax.Hub, wrapper, () =>
-        {
-            setWrapper(wrapper);
-            setLoading(false);
-        }]);
+        setWrapper(wrapper);
+
+        setLoading(false);
     }, [HTMLContent]);
+
+    useMaxJax(MATH_JAX, [HTMLContent]);
 
     return (
         <View HTMLContent={wrapper.innerHTML} loading={loading} />
