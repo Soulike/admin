@@ -23,7 +23,7 @@ function ArticleShower(props: IProps)
         setLoading(true);
         wrapper.querySelectorAll('pre code').forEach(async (block) =>
         {
-            hljs.highlightElement(block);
+            hljs.highlightElement(block as HTMLSpanElement);    // <code> is a HTMLSpanElement
             await setImmediatePromise();
         });
 
