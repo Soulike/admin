@@ -1,10 +1,11 @@
 import React from 'react';
 import Style from './Style.module.scss';
-import {Button, Card, Layout, Menu} from 'antd';
+import {Button, Card, Layout} from 'antd';
 import {Link} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {DashboardFilled, PoweroffOutlined} from '@ant-design/icons';
+import LinkList from './Component/LinkList';
 
 const {Header, Content, Footer} = Layout;
 
@@ -26,13 +27,9 @@ function FrameView(props: Props)
                         <span className={Style.text}>后台管理</span>
                     </div>
                 </Link>
-                <Menu theme="dark"
-                      mode="horizontal"
-                      className={Style.menu} selectable={false}>
-                    <Menu.Item>
-                        <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}>博客</Link>
-                    </Menu.Item>
-                </Menu>
+                <div className={Style.linkListWrapper}>
+                    <LinkList />
+                </div>
                 <Button type={'link'}
                         className={Style.exitButton}
                         size={'large'}

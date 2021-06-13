@@ -4,6 +4,10 @@
 
     .header {
 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
         .iconWrapper {
             float: left;
             height: 64px;
@@ -26,10 +30,8 @@
             }
         }
 
-        .menu {
-            line-height: 64px;
-            font-size: 20px;
-            display: inline-block;
+        .linkListWrapper {
+            flex-grow: 1;
         }
 
         .exitButton {
