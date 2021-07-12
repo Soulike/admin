@@ -1,5 +1,4 @@
-import 'highlight.js/scss/default.scss';
-import 'highlight.js/scss/vs2015.scss';
+import 'highlight.js/scss/atom-one-light.scss';
 
 import hljs from 'highlight.js/lib/core';
 
