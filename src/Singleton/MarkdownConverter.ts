@@ -6,4 +6,5 @@ export const markdownConverter = new showdown.Converter({
     tables: true,
     tasklists: true,
     smoothLivePreview: true,
+    literalMidWordUnderscores: true,   // avoid conflicting with latex
 });
