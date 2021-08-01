@@ -21,9 +21,12 @@ function ArticleShower(props: IProps)
         wrapper.innerHTML = HTMLContent;
 
         setLoading(true);
-        wrapper.querySelectorAll('pre').forEach(async (block) =>
+        wrapper.querySelectorAll('pre').forEach(async (pre) =>
         {
-            hljs.highlightElement(block as HTMLSpanElement);
+            pre.querySelectorAll('code').forEach((block) =>
+            {
+                hljs.highlightElement(block);
+            });
             await setImmediatePromise();
         });
 

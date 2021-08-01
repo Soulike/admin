@@ -9,8 +9,13 @@
         max-width: 100%;
 
         border-radius: 4px;
-        background-clip: border-box;
-        padding: 10px 20px;
+
+        code {
+            display: block;
+            background-clip: border-box;
+            padding: 10px 20px;
+
+        }
     }
 
     img, table {
