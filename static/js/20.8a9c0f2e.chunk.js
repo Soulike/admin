@@ -1,0 +1,3 @@
+(this.webpackJsonpadmin=this.webpackJsonpadmin||[]).push([[20],{420:function(t,e,a){t.exports={ManageIndex:"Style_ManageIndex__rxah9",image:"Style_image__ml7iL"}},453:function(t,e,a){"use strict";a.r(e);var d=a(0),n=a.n(d),l=a(420),m=a.n(l),i=a.p+"static/media/network_2.1f2643bb.svg";function s(){return n.a.createElement("div",{className:m.a.ManageIndex},n.a.createElement("img",{className:m.a.image,src:i,alt:"manage_index"}))}var o=n.a.memo(s),r=e.default=o}}]);
+
+//# sourceMappingURL=20.8a9c0f2e.chunk.js.map

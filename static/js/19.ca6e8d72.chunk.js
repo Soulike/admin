@@ -1,2 +1,0 @@
-(this.webpackJsonpadmin=this.webpackJsonpadmin||[]).push([[19],{429:function(a,e,c){a.exports={BlogIndex:"Style_BlogIndex__1Qixj",image:"Style_image__2stfc"}},479:function(a,e,c){"use strict";c.r(e);var n=c(0),i=c.n(n),s=c(429),t=c.n(s),m=c.p+"static/media/macbook.52cc9c0c.svg",o=c(21);function d(){return Object(o.jsx)("div",{className:t.a.BlogIndex,children:Object(o.jsx)("img",{className:t.a.image,src:m,alt:"manage_index"})})}var l=i.a.memo(d);e.default=l}}]);
-//# sourceMappingURL=19.ca6e8d72.chunk.js.map
