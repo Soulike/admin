@@ -1,3 +1,3 @@
-import Blog from './View';
+import {BlogFrame as Blog} from './Container';
 
 export default Blog;

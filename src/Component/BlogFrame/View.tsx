@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {Layout, Menu} from 'antd';
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom';
+import {Link, RouteComponentProps} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG';
 import {
     FileTextFilled,
@@ -15,9 +15,10 @@ import {
 const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
 
-interface Props extends RouteComponentProps
+interface Props
 {
-    children?: React.ReactNode
+    children?: React.ReactNode,
+    location: RouteComponentProps['location'],
 }
 
 function BlogFrameView(props: Props)
@@ -104,4 +105,4 @@ function BlogFrameView(props: Props)
     );
 }
 
-export default React.memo(withRouter(BlogFrameView));
+export default React.memo(BlogFrameView);
