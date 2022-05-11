@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkadmin=self.webpackChunkadmin||[]).push([[138],{6138:function(e,a,n){n.r(a),n.d(a,{default:function(){return r}});var c=n(2791),i="Style_BlogIndex__LgR-n",s="Style_image__Ci8-V";var t=n.p+"static/media/macbook.52cc9c0ce04f823d5fffd27759e5de2b.svg",d=n(184);function m(){return(0,d.jsx)("div",{className:i,children:(0,d.jsx)("img",{className:s,src:t,alt:"manage_index"})})}var r=c.memo(m)}}]);
-//# sourceMappingURL=138.42a73f8b.chunk.js.map

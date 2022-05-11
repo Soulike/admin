@@ -1,0 +1,2 @@
+"use strict";(globalThis.webpackChunkadmin=globalThis.webpackChunkadmin||[]).push([[138],{6138:(a,e,c)=>{c.r(e),c.d(e,{default:()=>m});var s=c(2791);const n="Style_BlogIndex__LgR-n",i="Style_image__Ci8-V";const t=c.p+"static/media/macbook.52cc9c0ce04f823d5fffd27759e5de2b.svg";var d=c(184);function l(){return(0,d.jsx)("div",{className:n,children:(0,d.jsx)("img",{className:i,src:t,alt:"manage_index"})})}const m=s.memo(l)}}]);
+//# sourceMappingURL=138.17765362.chunk.js.map
