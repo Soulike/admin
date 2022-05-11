@@ -12,7 +12,6 @@ import {
     TagsFilled,
 } from '@ant-design/icons';
 
-const {SubMenu} = Menu;
 const {Content, Sider} = Layout;
 
 interface Props
@@ -28,75 +27,97 @@ function BlogFrameView(props: Props)
         <Layout className={Style.BlogFrame}>
             <Sider width={250} theme={'light'}>
                 <Menu theme={'light'}
-                      mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location.pathname]]}>
-                    <SubMenu title={
-                        <span>
+                      mode={'inline'} selectedKeys={[ROUTE_TO_PAGE_ID[location.pathname]]} items={[
+                    {
+                        label: (
+                            <>
                             <span className={Style.icon}>
                                 <FileTextFilled />
                             </span>
-                            文章
-                        </span>
-                    } key={PAGE_ID.MANAGE.BLOG.INDEX}>
-                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.ADD}>
-                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}>
-                                <span className={Style.icon}>
-                                <PlusCircleOutlined />
-                                </span>
-                                添加
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE}>
-                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}>
-                                <span className={Style.icon}>
-                                <InfoCircleOutlined />
-                                </span>
-                                管理
-                            </Link>
-                        </Menu.Item>
-                    </SubMenu>
-                    <SubMenu title={
-                        <span>
+                                文章
+                            </>
+                        ),
+                        key: PAGE_ID.MANAGE.BLOG.INDEX,
+                        children: [
+                            {
+                                label: (
+                                    <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.ADD]}>
+                                        <span className={Style.icon}>
+                                            <PlusCircleOutlined />
+                                        </span>
+                                        添加
+                                    </Link>),
+                                key: PAGE_ID.MANAGE.BLOG.ARTICLE.ADD,
+                            },
+                            {
+                                label: (
+                                    <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]}>
+                                        <span className={Style.icon}>
+                                            <InfoCircleOutlined />
+                                        </span>
+                                        管理
+                                    </Link>),
+                                key: PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE,
+                            },
+                        ],
+                    },
+                    {
+                        label: (
+                            <>
                             <span className={Style.icon}>
                             <TagsFilled />
                             </span>
-                            文章分类
-                        </span>
-                    } key={PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX}>
-                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.ADD}>
-                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}>
+                                文章分类
+                            </>
+                        ),
+                        key: PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX,
+                        children: [
+                            {
+                                label: (
+                                    <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.ADD]}>
+                                        <span className={Style.icon}>
+                                            <PlusCircleOutlined />
+                                        </span>
+                                        添加
+                                    </Link>),
+                                key: PAGE_ID.MANAGE.BLOG.CATEGORY.ADD,
+                            },
+                            {
+                                label: (
+                                    <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}>
+                                        <span className={Style.icon}>
+                                            <InfoCircleOutlined />
+                                        </span>
+                                        管理
+                                    </Link>),
+                                key: PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE,
+                            },
+                        ],
+                    },
+                    {
+                        label: (
+                            <>
                                 <span className={Style.icon}>
-                                <PlusCircleOutlined />
+                                    <SettingOutlined />
                                 </span>
-                                添加
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE}>
-                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.MANAGE]}>
-                                <span className={Style.icon}>
-                                <InfoCircleOutlined />
-                                </span>
-                                管理
-                            </Link>
-                        </Menu.Item>
-                    </SubMenu>
-                    <SubMenu title={
-                        <span>
-                            <span className={Style.icon}>
-                                <SettingOutlined />
-                                </span>
-                            设置
-                        </span>
-                    } key={PAGE_ID.MANAGE.BLOG.OPTION.INDEX}>
-                        <Menu.Item key={PAGE_ID.MANAGE.BLOG.OPTION.ABOUT}>
-                            <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}>
-                                <span className={Style.icon}>
-                                <ProfileOutlined />
-                                </span>
-                                关于
-                            </Link>
-                        </Menu.Item>
-                    </SubMenu>
-                </Menu>
+                                设置
+                            </>),
+                        key: PAGE_ID.MANAGE.BLOG.OPTION.INDEX,
+                        children: [
+                            {
+                                label: (
+                                    <Link to={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT]}>
+                                        <span className={Style.icon}>
+                                            <ProfileOutlined />
+                                        </span>
+                                        关于
+                                    </Link>
+                                ),
+                                key: PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.ABOUT],
+                            },
+                        ],
+                    },
+                ]} />
             </Sider>
             <Content className={Style.content}>
                 {children}
