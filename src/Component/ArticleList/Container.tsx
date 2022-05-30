@@ -9,7 +9,6 @@ import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {useNavigate} from 'react-router-dom';
 import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
-import querystring from 'querystring';
 import {SwitchProps} from 'antd/lib/switch';
 
 interface IProps
@@ -145,7 +144,9 @@ function ArticleList(props: IProps)
         return e =>
         {
             e.preventDefault();
-            navigate(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${querystring.encode({id})}`);
+            const urlSearchParams = new URLSearchParams();
+            urlSearchParams.set('id', id.toString());
+            navigate(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${urlSearchParams.toString()}`);
         };
     };
 

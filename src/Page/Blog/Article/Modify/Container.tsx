@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import View from './View';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {Category} from '../../../../Class';
-import querystring from 'querystring';
 import {ButtonProps, message, notification} from 'antd';
 import {Blog} from '../../../../Api';
 import {NativeButtonProps} from 'antd/lib/button/button';
@@ -26,14 +25,14 @@ function Modify()
     const [isArticlePreviewModalVisible, setIsArticlePreviewModalVisible] = useState(false);
     const [HTMLContent, setHTMLContent] = useState('');
 
-    const {search} = useLocation();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
     useEffect(() =>
     {
         // 查询字符串格式为 ?id=xxx
-        const {id: idString} = querystring.parse(search.slice(1));
-        if (typeof idString !== 'string')
+        const idString = searchParams.get('id');
+        if (idString === null)
         {
             message.warning('参数不正确');
         }
@@ -64,7 +63,7 @@ function Modify()
                     .finally(() => setIsLoadingArticle(false));
             }
         }
-    }, [search]);
+    }, [searchParams]);
 
     useEffect(() =>
     {
