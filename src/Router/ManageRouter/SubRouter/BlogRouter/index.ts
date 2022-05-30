@@ -1,3 +1,1 @@
-import BlogRouter from './BlogRouter';
-
-export default BlogRouter;
+export {BlogRouter} from './BlogRouter';

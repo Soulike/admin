@@ -1,8 +1,8 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {Layout, Menu} from 'antd';
-import {Link, RouteComponentProps} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG';
+import {Link, Location, Outlet} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE, ROUTE_TO_PAGE_ID} from '../../CONFIG/PAGE';
 import {
     FileTextFilled,
     InfoCircleOutlined,
@@ -16,13 +16,12 @@ const {Content, Sider} = Layout;
 
 interface Props
 {
-    children?: React.ReactNode,
-    location: RouteComponentProps['location'],
+    location: Location,
 }
 
 function BlogFrameView(props: Props)
 {
-    const {children, location} = props;
+    const {location} = props;
     return (
         <Layout className={Style.BlogFrame}>
             <Sider width={250} theme={'light'}>
@@ -120,7 +119,7 @@ function BlogFrameView(props: Props)
                 ]} />
             </Sider>
             <Content className={Style.content}>
-                {children}
+                <Outlet />
             </Content>
         </Layout>
     );

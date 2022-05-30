@@ -1,28 +1,23 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_COMPONENT, PAGE_ID_TO_ROUTE} from '../../../../CONFIG';
-import ArticleRouter from './SubRouter/ArticleRouter';
-import CategoryRouter from './SubRouter/CategoryRouter';
-import OptionRouter from './SubRouter/OptionRouter';
-import NotFound from '../../../../Component/NotFound';
-import BlogFrame from '../../../../Component/BlogFrame';
+import {Route} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_COMPONENT, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
+import {ArticleRouter} from './SubRouter/ArticleRouter';
+import {CategoryRouter} from './SubRouter/CategoryRouter';
+import {OptionRouter} from './SubRouter/OptionRouter';
 
-export default () =>
-{
-    return (
-        <Switch>
-            <BlogFrame>
-                <Route exact={true}
-                       path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}
-                       component={PAGE_ID_TO_COMPONENT[PAGE_ID.MANAGE.BLOG.INDEX]} />
-                <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX]}
-                       component={ArticleRouter} />
-                <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX]}
-                       component={CategoryRouter} />
-                <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.INDEX]}
-                       component={OptionRouter} />
-            </BlogFrame>
-            <Route render={NotFound} />
-        </Switch>
-    );
-};
+const IndexComponent = PAGE_ID_TO_COMPONENT[PAGE_ID.MANAGE.BLOG.INDEX];
+
+export const BlogRouter = (
+    <>
+        <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}
+               element={<IndexComponent />} />
+        <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.INDEX]}>
+            {ArticleRouter}
+        </Route>
+        <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.CATEGORY.INDEX]}>
+            {CategoryRouter}
+        </Route>
+        <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.OPTION.INDEX]}>
+            {OptionRouter}
+        </Route>
+    </>);

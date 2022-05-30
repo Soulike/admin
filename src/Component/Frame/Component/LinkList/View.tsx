@@ -1,5 +1,5 @@
 import React from 'react';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
 import {Link} from 'react-router-dom';
 import Style from './Style.module.scss';
 

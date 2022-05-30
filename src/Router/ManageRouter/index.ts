@@ -1,3 +1,1 @@
-import ManageRouter from './ManageRouter';
-
-export default ManageRouter;
+export {ManageRouter} from './ManageRouter';

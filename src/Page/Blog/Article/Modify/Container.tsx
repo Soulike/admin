@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import View from './View';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {Category} from '../../../../Class';
 import querystring from 'querystring';
 import {ButtonProps, message, notification} from 'antd';
@@ -10,7 +10,7 @@ import {markdownConverter} from '../../../../Singleton';
 import {InputProps, TextAreaProps} from 'antd/lib/input';
 import {SelectProps} from 'antd/lib/select';
 import {CheckboxProps} from 'antd/lib/checkbox';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../../../CONFIG/PAGE';
 
 function Modify()
 {
@@ -27,7 +27,7 @@ function Modify()
     const [HTMLContent, setHTMLContent] = useState('');
 
     const {search} = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() =>
     {
@@ -138,7 +138,7 @@ function Modify()
             if (result !== null)
             {
                 notification.success({message: '文章修改成功'});
-                history.replace(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE]);
+                navigate(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MANAGE], {replace: true});
             }
         }
     };

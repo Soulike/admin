@@ -1,8 +1,8 @@
 import React from 'react';
 import Style from './Style.module.scss';
 import {Button, Card, Layout} from 'antd';
-import {Link} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
+import {Link, Outlet} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import {NativeButtonProps} from 'antd/lib/button/button';
 import {DashboardFilled, PoweroffOutlined} from '@ant-design/icons';
 import LinkList from './Component/LinkList';
@@ -11,13 +11,12 @@ const {Header, Content, Footer} = Layout;
 
 interface Props
 {
-    children?: React.ReactNode,
     onExitButtonClick: NativeButtonProps['onClick'],
 }
 
 function FrameView(props: Props)
 {
-    const {children, onExitButtonClick} = props;
+    const {onExitButtonClick} = props;
     return (
         <Layout className={Style.Frame}>
             <Header className={Style.header}>
@@ -41,7 +40,7 @@ function FrameView(props: Props)
             <Layout className={Style.contentLayout}>
                 <Content className={Style.content}>
                     <Card className={Style.card} bodyStyle={{height: '100%'}}>
-                        {children}
+                        <Outlet />
                     </Card>
                 </Content>
             </Layout>

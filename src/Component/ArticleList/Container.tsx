@@ -7,8 +7,8 @@ import {message, notification} from 'antd';
 import {Blog} from '../../Api';
 import {PopconfirmProps} from 'antd/lib/popconfirm';
 import {NativeButtonProps} from 'antd/lib/button/button';
-import {useHistory} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
+import {useNavigate} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 import querystring from 'querystring';
 import {SwitchProps} from 'antd/lib/switch';
 
@@ -31,7 +31,7 @@ function ArticleList(props: IProps)
 
     const [idOfArticleToDelete, setIdOfArticleToDelete] = useState(0);
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {categoryIdFilter} = props;
 
@@ -145,7 +145,7 @@ function ArticleList(props: IProps)
         return e =>
         {
             e.preventDefault();
-            history.push(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${querystring.encode({id})}`);
+            navigate(`${PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.ARTICLE.MODIFY]}?${querystring.encode({id})}`);
         };
     };
 
