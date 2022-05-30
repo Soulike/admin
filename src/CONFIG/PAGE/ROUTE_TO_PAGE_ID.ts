@@ -1,4 +1,4 @@
-import {PAGE_ID_TO_ROUTE} from '../PAGE';
+import {PAGE_ID_TO_ROUTE} from './PAGE_ID_TO_ROUTE';
 
 export const ROUTE_TO_PAGE_ID: { [key: string]: string } = {};
 

@@ -1,7 +1,7 @@
 import React, {DOMAttributes, useEffect, useState} from 'react';
 import View from './View';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
-import {useHistory} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {useNavigate} from 'react-router-dom';
 import {Account} from '../../Api';
 import {InputProps} from 'antd/lib/input';
 import {notification} from 'antd';
@@ -11,7 +11,7 @@ function Login()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() =>
     {
@@ -23,11 +23,11 @@ function Login()
                     const {isInSession} = res;
                     if (isInSession)
                     {
-                        history.replace(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
+                        navigate(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX], {replace: true});
                     }
                 }
             });
-    }, [history]);
+    }, [navigate]);
 
     const onUsernameInputChange: InputProps['onChange'] = e =>
     {
@@ -46,7 +46,7 @@ function Login()
         if (isSuccessful)
         {
             notification.success({message: '登录成功'});
-            history.push(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
+            navigate(PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]);
         }
     };
 

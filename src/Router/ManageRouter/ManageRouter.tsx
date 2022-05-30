@@ -1,22 +1,17 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_COMPONENT, PAGE_ID_TO_ROUTE} from '../../CONFIG';
-import BlogRouter from './SubRouter/BlogRouter';
-import NotFound from '../../Component/NotFound';
+import {Route} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_COMPONENT, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
+import {BlogRouter} from './SubRouter/BlogRouter';
+import BlogFrame from '../../Component/BlogFrame';
 
-const Frame = React.lazy(() => import('../../Component/Frame'));
+const IndexComponent = PAGE_ID_TO_COMPONENT[PAGE_ID.MANAGE.INDEX];
 
-export default () =>
-{
-    return (
-        <Switch>
-            <Frame>
-                <Route exact={true}
-                       path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.INDEX]}
-                       component={PAGE_ID_TO_COMPONENT[PAGE_ID.MANAGE.INDEX]} />
-                <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]} component={BlogRouter} />
-            </Frame>
-            <Route render={NotFound} />
-        </Switch>
-    );
-};
+export const ManageRouter = (
+    <>
+        <Route index={true}
+               element={<IndexComponent />} />
+        <Route path={PAGE_ID_TO_ROUTE[PAGE_ID.MANAGE.BLOG.INDEX]}
+               element={<BlogFrame />}>
+            {BlogRouter}
+        </Route>
+    </>);

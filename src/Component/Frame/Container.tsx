@@ -4,17 +4,12 @@ import {NativeButtonProps} from 'antd/lib/button/button';
 import {Modal, notification} from 'antd';
 import {ModalFuncProps} from 'antd/lib/modal';
 import {Account as AccountApi} from '../../Api';
-import {useHistory} from 'react-router-dom';
-import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG';
+import {useNavigate} from 'react-router-dom';
+import {PAGE_ID, PAGE_ID_TO_ROUTE} from '../../CONFIG/PAGE';
 
-interface IProps
+function Frame()
 {
-    children?: React.ReactNode
-}
-
-function Frame(props: IProps)
-{
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const onExitModalOkButtonClick: ModalFuncProps['onOk'] = async () =>
     {
@@ -22,7 +17,7 @@ function Frame(props: IProps)
         notification.success({
             message: '退出成功',
         });
-        history.replace(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN]);
+        navigate(PAGE_ID_TO_ROUTE[PAGE_ID.LOGIN], {replace: true});
     };
 
     const onExitButtonClick: NativeButtonProps['onClick'] = e =>
@@ -34,8 +29,7 @@ function Frame(props: IProps)
         });
     };
 
-    const {children} = props;
-    return (<View onExitButtonClick={onExitButtonClick}>{children}</View>);
+    return (<View onExitButtonClick={onExitButtonClick} />);
 }
 
 export default React.memo(Frame);
