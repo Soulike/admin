@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.scss';
 import {Provider} from 'react-redux';
 import Store from './Store';
@@ -10,7 +10,9 @@ import zhCN from 'antd/es/locale/zh_CN';
 import {ConfigProvider} from 'antd';
 import {Router} from './Router';
 
-ReactDOM.render(
+const container = ReactDOM.createRoot(document.getElementById('root')!);
+
+container.render((
     <React.StrictMode>
         <Suspense fallback={<Loading />}>
             <Provider store={Store}>
@@ -19,8 +21,8 @@ ReactDOM.render(
                 </ConfigProvider>
             </Provider>
         </Suspense>
-    </React.StrictMode>,
-    document.getElementById('root'));
+    </React.StrictMode>
+));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
